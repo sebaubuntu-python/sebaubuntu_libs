@@ -9,6 +9,7 @@ repository = "https://github.com/SebaUbuntu/sebaubuntu_libs"
 
 [tool.poetry.dependencies]
 python = "^3.9"
+GitPython = "^3.1.27"
 
 [tool.poetry.dev-dependencies]
 
