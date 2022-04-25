@@ -226,7 +226,6 @@ class DeviceData:
 		if isinstance(data["release"], list):
 			release = {}
 			for rel in data["release"]:
-				print(rel.items())
 				device, date = list(rel.items())[0]
 				release[device] = convert_release_date(date)
 		else:
