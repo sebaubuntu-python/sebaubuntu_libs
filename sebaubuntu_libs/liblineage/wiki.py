@@ -185,7 +185,8 @@ class DeviceData:
 		if data["battery"]:
 			if isinstance(data["battery"], list):
 				battery = {}
-				for device, battery_data in data["battery"]:
+				for bat in data["battery"]:
+					device, battery_data = list(bat.items())[0]
 					battery[device] = BatteryData.from_dict(battery_data)
 			else:
 				battery = BatteryData.from_dict(data["battery"])
@@ -288,7 +289,7 @@ class DeviceData:
 				f"Screen: {escape_markdown(str(self.screen), 2) if not isinstance(self.screen, dict) else escape_markdown(', '.join([f'{device}: {screen_data}' for device, screen_data in self.screen.items()]), 2)}\n"
 				f"Device tree repository: {escape_markdown(f'{GITHUB_ORG}/{self.tree}', 2)}\n"
 				f"Versions: {escape_markdown(', '.join([str(version) for version in self.versions]), 2)}\n"
-				f"Battery: {escape_markdown(str(self.battery))}\n"
+				f"Battery: {escape_markdown(str(self.battery), 2) if not isinstance(self.battery, dict) else escape_markdown(', '.join([f'{device}: {battery_data}' for device, battery_data in self.battery.items()]), 2)}\n"
 				f"Bluetooth: {escape_markdown(str(self.bluetooth), 2)}\n"
 				f"Dimensions: {escape_markdown(str(self.dimensions), 2) if not isinstance(self.dimensions, dict) else escape_markdown(', '.join([f'{device}: {dimensions_data}' for device, dimensions_data in self.dimensions.items()]), 2)}")
 
