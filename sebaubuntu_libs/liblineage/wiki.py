@@ -7,7 +7,6 @@
 from datetime import datetime
 import requests
 from sebaubuntu_libs.liblineage import GITHUB_ORG
-from telegram.utils.helpers import escape_markdown
 from typing import Union
 import yaml
 
@@ -270,27 +269,27 @@ class DeviceData:
 
 	def __str__(self) -> str:
 		"""Return a string representation of the device data."""
-		return (f"Name: {escape_markdown(self.name, 2)}\n"
-		        f"Codename: {escape_markdown(self.codename, 2)}\n"
-		        f"Type: {escape_markdown(self.device_type, 2)}\n"
-				f"Vendor: {escape_markdown(self.vendor, 2)}\n"
-				f"Vendor \(short\): {escape_markdown(self.vendor_short, 2)}\n"
-				f"Architecture: {escape_markdown(self.architecture, 2)}\n"
-				f"CPU: {escape_markdown(self.cpu, 2)}\n"
-				f"CPU cores: {escape_markdown(self.cpu_cores, 2)}\n"
-				f"CPU frequency: {escape_markdown(self.cpu_freq, 2)}\n"
-				f"GPU: {escape_markdown(self.gpu, 2)}\n"
-				f"Install method: {escape_markdown(self.install_method, 2)}\n"
-				f"Kernel repository: {escape_markdown(f'{GITHUB_ORG}/{self.kernel}', 2)}\n"
-				f"Maintainers: {escape_markdown(', '.join(self.maintainers), 2) if self.maintainers else escape_markdown('None (unmaintained)', 2)}\n"
-				f"Peripherals: {escape_markdown(', '.join(self.peripherals), 2)}\n"
-				f"Release: {escape_markdown(str(self.release), 2) if not isinstance(self.release, dict) else escape_markdown(', '.join([f'{device}: {date}' for device, date in self.release.items()]), 2)}\n"
-				f"Screen: {escape_markdown(str(self.screen), 2) if not isinstance(self.screen, dict) else escape_markdown(', '.join([f'{device}: {screen_data}' for device, screen_data in self.screen.items()]), 2)}\n"
-				f"Device tree repository: {escape_markdown(f'{GITHUB_ORG}/{self.tree}', 2)}\n"
-				f"Versions: {escape_markdown(', '.join([str(version) for version in self.versions]), 2)}\n"
-				f"Battery: {escape_markdown(str(self.battery), 2) if not isinstance(self.battery, dict) else escape_markdown(', '.join([f'{device}: {battery_data}' for device, battery_data in self.battery.items()]), 2)}\n"
-				f"Bluetooth: {escape_markdown(str(self.bluetooth), 2)}\n"
-				f"Dimensions: {escape_markdown(str(self.dimensions), 2) if not isinstance(self.dimensions, dict) else escape_markdown(', '.join([f'{device}: {dimensions_data}' for device, dimensions_data in self.dimensions.items()]), 2)}")
+		return (f"Name: {self.name}\n"
+		        f"Codename: {self.codename}\n"
+		        f"Type: {self.device_type}\n"
+				f"Vendor: {self.vendor}\n"
+				f"Vendor (short): {self.vendor_short}\n"
+				f"Architecture: {self.architecture}\n"
+				f"CPU: {self.cpu}\n"
+				f"CPU cores: {self.cpu_cores}\n"
+				f"CPU frequency: {self.cpu_freq}\n"
+				f"GPU: {self.gpu}\n"
+				f"Install method: {self.install_method}\n"
+				f"Kernel repository: {f'{GITHUB_ORG}/{self.kernel}'}\n"
+				f"Maintainers: {', '.join(self.maintainers) if self.maintainers else 'None (unmaintained)'}\n"
+				f"Peripherals: {', '.join(self.peripherals)}\n"
+				f"Release: {str(self.release) if not isinstance(self.release, dict) else ', '.join([f'{device}: {date}' for device, date in self.release.items()])}\n"
+				f"Screen: {str(self.screen) if not isinstance(self.screen, dict) else ', '.join([f'{device}: {screen_data}' for device, screen_data in self.screen.items()])}\n"
+				f"Device tree repository: {f'{GITHUB_ORG}/{self.tree}'}\n"
+				f"Versions: {', '.join([str(version) for version in self.versions])}\n"
+				f"Battery: {str(self.battery) if not isinstance(self.battery, dict) else ', '.join([f'{device}: {battery_data}' for device, battery_data in self.battery.items()])}\n"
+				f"Bluetooth: {str(self.bluetooth)}\n"
+				f"Dimensions: {str(self.dimensions) if not isinstance(self.dimensions, dict) else ', '.join([f'{device}: {dimensions_data}' for device, dimensions_data in self.dimensions.items()])}")
 
 def get_device_data(device: str):
 	url = f"https://raw.githubusercontent.com/LineageOS/lineage_wiki/master/_data/devices/{device}.yml"
