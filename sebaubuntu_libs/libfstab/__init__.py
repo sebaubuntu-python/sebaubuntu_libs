@@ -55,7 +55,10 @@ class Fstab:
 			self.entries.append(FstabEntry.from_entry(line))
 
 	def __str__(self):
-		string = FSTAB_HEADER
+		return self.format()
+
+	def format(self, twrp: bool = False):
+		entries = []
 
 		src_len_max = 0
 		mount_point_len_max = 0
@@ -87,7 +90,7 @@ class Fstab:
 		for entry in self.entries:
 			src_space = ""
 			mount_point_space = ""
-			fstype_space = ""
+			fs_type_space = ""
 			mnt_flags_space = ""
 
 			for _ in repeat(None, src_len_max - len(entry.src)):
@@ -95,12 +98,23 @@ class Fstab:
 			for _ in repeat(None, mount_point_len_max - len(entry.mount_point)):
 				mount_point_space += " "
 			for _ in repeat(None, fs_type_len_max - len(entry.fs_type)):
-				fstype_space += " "
+				fs_type_space += " "
 			for _ in repeat(None, mnt_flags_len_max - len(entry.mnt_flags)):
 				mnt_flags_space += " "
-			string += f"{entry.src}{src_space}{entry.mount_point}{mount_point_space}{entry.fs_type}{fstype_space}{','.join(entry.mnt_flags)}{mnt_flags_space}{','.join(entry.fs_flags)}\n"
 
-		return string
+			if not twrp:
+				entries.append(f"{entry.src}{src_space}{entry.mount_point}{mount_point_space}{entry.fs_type}{fs_type_space}{','.join(entry.mnt_flags)}{mnt_flags_space}{','.join(entry.fs_flags)}")
+			else:
+				flags = [f'display={Path(entry.mount_point).name}']
+				if entry.is_logical():
+					flags.append("logical")
+				if entry.is_slotselect():
+					flags.append("slotselect")
+				entries.append(f"{entry.mount_point}{mount_point_space}{entry.fs_type}{fs_type_space}{entry.src}{src_space}flags={';'.join(flags)}")
+
+		entries.append("")
+
+		return "\n".join(entries)
 
 	def get_partition_by_mount_point(self, mount_point: str):
 		for entry in self.entries:
