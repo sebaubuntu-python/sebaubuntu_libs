@@ -81,3 +81,6 @@ class BuildProp(dict):
 
 	def set_prop(self, key: str, value: str):
 		self[key] = value
+
+	def write_to_file(self, path: Path, excluded_props: list[str] = []):
+		path.write_text(self.get_readable_list(excluded_props), encoding="utf-8")
