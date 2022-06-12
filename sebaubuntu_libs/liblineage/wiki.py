@@ -7,7 +7,7 @@
 from datetime import datetime
 import requests
 from sebaubuntu_libs.liblineage import GITHUB_ORG
-from typing import Union
+from typing import Dict, List, Union
 import yaml
 
 class BatteryData:
@@ -23,7 +23,7 @@ class BatteryData:
 		self.removable = removable
 
 	@classmethod
-	def from_dict(self, battery: dict):
+	def from_dict(self, battery: Dict):
 		"""Create a battery information object from a dictionary."""
 		return self(battery["capacity"], battery["removable"])
 
@@ -43,7 +43,7 @@ class BluetoothData:
 		self.spec = spec
 
 	@classmethod
-	def from_dict(self, bluetooth: dict):
+	def from_dict(self, bluetooth: Dict):
 		"""Create a Bluetooth information object from a dictionary."""
 		return self(bluetooth["spec"])
 
@@ -65,7 +65,7 @@ class DimensionData:
 		self.depth = depth
 
 	@classmethod
-	def from_dict(self, dimension: dict):
+	def from_dict(self, dimension: Dict):
 		"""Create a dimension information object from a dictionary."""
 		return self(dimension["height"], dimension["width"], dimension["depth"])
 
@@ -91,7 +91,7 @@ class ScreenData:
 		self.technology = technology
 
 	@classmethod
-	def from_dict(self, device: dict):
+	def from_dict(self, device: Dict):
 		"""Create a screen information object from a dictionary."""
 		return self(device["size"], device["density"], device["resolution"], device["technology"])
 
@@ -131,27 +131,27 @@ class DeviceData:
 	"""
 	def __init__(self,
 	             architecture: str,
-	             battery: Union[BatteryData, dict, None],
+	             battery: Union[BatteryData, Dict, None],
 	             bluetooth: BluetoothData, codename: str,
 	             cpu: str,
 	             cpu_cores: str,
 	             cpu_freq: str,
 	             current_branch: float,
-	             dimensions: Union[DimensionData, dict, None],
+	             dimensions: Union[DimensionData, Dict, None],
 	             gpu: str,
 	             image: str,
 	             install_method: str,
 	             kernel: str,
-	             maintainers: list,
+	             maintainers: List,
 	             name: str,
-	             peripherals: list,
-	             release: Union[datetime, dict, None],
-	             screen: Union[ScreenData, dict, None],
+	             peripherals: List,
+	             release: Union[datetime, Dict, None],
+	             screen: Union[ScreenData, Dict, None],
 	             tree: str,
 	             device_type: str,
 	             vendor: str,
 	             vendor_short: str,
-	             versions: list[float]
+	             versions: List[float]
 	            ):
 		"""Initialize the device information."""
 		self.architecture = architecture
@@ -179,7 +179,7 @@ class DeviceData:
 		self.versions = versions
 
 	@classmethod
-	def from_dict(self, data: dict):
+	def from_dict(self, data: Dict):
 		"""Create a device data object from a dictionary."""
 		if data["battery"]:
 			if isinstance(data["battery"], list):

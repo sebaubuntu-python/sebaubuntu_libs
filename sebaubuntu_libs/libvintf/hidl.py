@@ -4,6 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+from typing import List
 from sebaubuntu_libs.libvintf import INDENTATION
 from sebaubuntu_libs.libvintf.common import Hal, cast_to_str_key
 from textwrap import indent
@@ -40,14 +41,14 @@ class HidlInterface:
 		return cls(name, version, instance)
 
 	@classmethod
-	def from_interface(cls, version: str, interface: Element) -> list['HidlInterface']:
+	def from_interface(cls, version: str, interface: Element) -> List['HidlInterface']:
 		"""Create a AIDL HAL from an interface."""
 		name = interface.findtext("name")
 
 		return [cls(name, version, instance.text) for instance in interface.findall("instance")]
 
 	@classmethod
-	def from_interfaces(cls, version: str, interfaces: list[Element]) -> list['HidlInterface']:
+	def from_interfaces(cls, version: str, interfaces: List[Element]) -> List['HidlInterface']:
 		instances = [cls.from_interface(version, interface) for interface in interfaces]
 
 		return [interface for interfaces in instances for interface in interfaces]

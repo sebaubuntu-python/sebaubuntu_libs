@@ -8,7 +8,7 @@
 from __future__ import annotations
 from distutils.util import strtobool
 from pathlib import Path
-from typing import Union
+from typing import List, Union
 
 class BuildProp(dict):
 	"""
@@ -25,7 +25,7 @@ class BuildProp(dict):
 	def __str__(self):
 		return self.get_readable_list()
 
-	def get_readable_list(self, excluded_props: list[str] = []):
+	def get_readable_list(self, excluded_props: List[str] = []):
 		ordered_props = dict(sorted(self.items()))
 
 		for excluded_prop in excluded_props:
@@ -82,5 +82,5 @@ class BuildProp(dict):
 	def set_prop(self, key: str, value: str):
 		self[key] = value
 
-	def write_to_file(self, path: Path, excluded_props: list[str] = []):
+	def write_to_file(self, path: Path, excluded_props: List[str] = []):
 		path.write_text(self.get_readable_list(excluded_props), encoding="utf-8")

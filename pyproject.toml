@@ -8,7 +8,7 @@ readme = "README.md"
 repository = "https://github.com/SebaUbuntu/sebaubuntu_libs"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.8"
 GitPython = "^3.1.27"
 
 [tool.poetry.dev-dependencies]

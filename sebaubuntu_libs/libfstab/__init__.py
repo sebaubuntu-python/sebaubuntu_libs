@@ -7,6 +7,7 @@
 
 from itertools import repeat
 from pathlib import Path
+from typing import List
 
 FSTAB_HEADER = "#<src>                                                 <mnt_point>            <type>  <mnt_flags and options>                            <fs_mgr_flags>\n"
 
@@ -18,8 +19,8 @@ class FstabEntry:
 	             src: str,
 	             mount_point: str,
 	             fs_type: str,
-	             mnt_flags: list[str],
-	             fs_flags: list[str],
+	             mnt_flags: List[str],
+	             fs_flags: List[str],
 	            ):
 		self.src = src
 		self.mount_point = mount_point
@@ -43,7 +44,7 @@ class Fstab:
 	def __init__(self, fstab: Path):
 		self.fstab = fstab
 
-		self.entries: list[FstabEntry] = []
+		self.entries: List[FstabEntry] = []
 
 		for line in self.fstab.read_text().splitlines():
 			if not line:

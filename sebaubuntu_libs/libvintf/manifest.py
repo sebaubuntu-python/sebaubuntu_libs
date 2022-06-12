@@ -7,6 +7,7 @@
 from functools import cmp_to_key
 from locale import strcoll
 from pathlib import Path
+from typing import List
 from sebaubuntu_libs.liblogging import LOGW
 from sebaubuntu_libs.libvintf import INDENTATION
 from sebaubuntu_libs.libvintf.aidl import AidlHal
@@ -40,7 +41,7 @@ class Manifest:
 		self.version = None
 		self.type: str = None
 		self.target_level: str = None
-		self.entries: list[Hal] = []
+		self.entries: List[Hal] = []
 
 	def __str__(self):
 		string = f'<manifest version="{self.version}" type="{self.type}" target-level="{self.target_level}">\n'

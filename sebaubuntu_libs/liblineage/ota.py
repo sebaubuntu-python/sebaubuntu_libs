@@ -5,6 +5,7 @@
 #
 
 from datetime import datetime
+from typing import Dict
 import requests
 
 API_VERSION = "v1"
@@ -41,7 +42,7 @@ class FullUpdateInfo:
 		self.version = version
 
 	@classmethod
-	def from_json(self, update: dict):
+	def from_json(self, update: Dict):
 		"""Create a full update information object from a JSON object."""
 		return self(datetime.fromtimestamp(update["datetime"]), update["filename"],
 		            update["id"], update["romtype"],

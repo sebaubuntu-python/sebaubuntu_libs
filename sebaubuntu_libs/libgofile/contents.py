@@ -5,6 +5,7 @@
 #
 
 from datetime import datetime
+from typing import Dict, List
 
 class Content:
 	def __init__(self,
@@ -31,7 +32,7 @@ class Content:
 		}
 
 	@staticmethod
-	def from_dict(data: dict):
+	def from_dict(data: Dict):
 		create_time = datetime.fromtimestamp(data["createTime"])
 
 		return Content(content_id=data["id"], content_type=data["type"], name=data["name"],
@@ -74,7 +75,7 @@ class File(Content):
 		return kwargs
 
 	@staticmethod
-	def from_dict(data: dict):
+	def from_dict(data: Dict):
 		content = Content.from_dict(data)
 
 		return File(size=data["size"], download_count=data["downloadCount"], md5=data["md5"],
@@ -85,7 +86,7 @@ class File(Content):
 class Folder(Content):
 	"""Class representing a GoFile folder."""
 	def __init__(self,
-				 childs: list[str],
+				 childs: List[str],
 				 code: str,
 				 public: bool,
 				 *args, **kwargs,
@@ -107,7 +108,7 @@ class Folder(Content):
 		return kwargs
 
 	@staticmethod
-	def from_dict(data: dict):
+	def from_dict(data: Dict):
 		content = Content.from_dict(data)
 
 		public = data.get("public")
@@ -122,7 +123,7 @@ class ContentResponse(Folder):
 	def __init__(self,
 				 total_download_count: int,
 				 total_size: int,
-				 contents: dict[str, dict],
+				 contents: Dict[str, Dict],
 				 # We may not know the owner ID if the owner isn't the one who called get_content
 				 owner_id: str = None,
 				 # Only for non-root folders
@@ -142,7 +143,7 @@ class ContentResponse(Folder):
 		self.is_root = is_root
 
 	@staticmethod
-	def from_dict(data: dict):
+	def from_dict(data: Dict):
 		folder = Folder.from_dict(data)
 
 		owner_id = data.get("ownerId")
