@@ -190,4 +190,4 @@ class AIKManager:
 
 	def _execute_script(self, script: str, *args):
 		command = [self.path / script, "--nosudo", *args]
-		return check_output(command, stderr=STDOUT, universal_newlines=True)
+		return check_output(command, stderr=STDOUT, universal_newlines=True, encoding="utf-8")
