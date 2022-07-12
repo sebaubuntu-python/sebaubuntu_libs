@@ -5,7 +5,7 @@
 #
 """LineageOS library."""
 
-from sebaubuntu_libs.libandroid import AndroidVersion
+from sebaubuntu_libs.libandroid.versions import AndroidVersion
 
 GITHUB_ORG = "https://github.com/LineageOS"
 
