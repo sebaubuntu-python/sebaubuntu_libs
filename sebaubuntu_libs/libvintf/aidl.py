@@ -7,6 +7,7 @@
 from sebaubuntu_libs.libvintf import INDENTATION
 from sebaubuntu_libs.libvintf.common import Hal, cast_to_str_key
 from textwrap import indent
+from typing import Set
 from xml.etree.ElementTree import Element
 
 class AidlInterface:
@@ -42,7 +43,7 @@ class AidlInterface:
 
 class AidlHal(Hal):
 	"""Class representing a AIDL HAL."""
-	def __init__(self, name: str, interfaces: set[AidlInterface]):
+	def __init__(self, name: str, interfaces: Set[AidlInterface]):
 		"""Initialize an object."""
 		super().__init__(name)
 

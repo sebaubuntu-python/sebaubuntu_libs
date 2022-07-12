@@ -4,7 +4,8 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-from typing import List
+from typing import List, Set
+from sebaubuntu_libs.libstring import removeprefix
 from sebaubuntu_libs.libvintf import INDENTATION
 from sebaubuntu_libs.libvintf.common import Hal, cast_to_str_key
 from textwrap import indent
@@ -34,7 +35,7 @@ class HidlInterface:
 	@classmethod
 	def from_fqname(cls, fqname: str) -> 'HidlInterface':
 		"""Create a AIDL HAL from a FQName."""
-		temp = fqname.removeprefix("@")
+		temp = removeprefix(fqname, "@")
 		version, temp = temp.split("::", 1)
 		name, instance = temp.split("/", 1)
 
@@ -87,7 +88,7 @@ class HidlTransport:
 
 class HidlHal(Hal):
 	"""Class representing a HIDL HAL."""
-	def __init__(self, name: str, transport: HidlTransport, interfaces: set[HidlInterface]):
+	def __init__(self, name: str, transport: HidlTransport, interfaces: Set[HidlInterface]):
 		"""Initialize an object."""
 		super().__init__(name)
 
