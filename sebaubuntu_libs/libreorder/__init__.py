@@ -10,6 +10,8 @@ from locale import strcoll
 from pathlib import Path
 from typing import Union
 
+from sebaubuntu_libs.libstring import removeprefix
+
 def strcoll_files(string1: Union[str, Path], string2: Union[str, Path]) -> int:
 	"""Reorder a file list by dir first, then name."""
 	string1 = str(string1)
@@ -51,8 +53,8 @@ def strcoll_proprietary_files(string1: Union[str, Path], string2: Union[str, Pat
 
 	# Remove '-' from strings if there,
 	# it is used to indicate a build target
-	string1 = string1.removeprefix('-')
-	string2 = string2.removeprefix('-')
+	string1 = removeprefix(string1, '-')
+	string2 = removeprefix(string2, '-')
 
 	return strcoll_files(string1, string2)
 
