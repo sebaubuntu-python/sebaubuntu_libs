@@ -8,7 +8,7 @@
 from __future__ import annotations
 from distutils.util import strtobool
 from pathlib import Path
-from typing import List, Union
+from typing import Any, Callable, List, Union
 
 class BuildProp(dict):
 	"""
@@ -49,37 +49,29 @@ class BuildProp(dict):
 			else:
 				self.set_prop(prop_name, prop_value)
 
-	def get_prop(self, key: str, default: str = None):
+	def _get_prop(self, key: str, data_type: Callable[[str], Any] = str, default: Any = None):
 		if key in self:
-			return self[key]
+			try:
+				return data_type(self[key])
+			except ValueError:
+				return default
 		else:
 			return default
 
-	def get_prop_bool(self, key: str, default: bool = False):
-		value = self.get_prop(key)
+	def get_prop(self, key: str, default: str = None):
+		return self._get_prop(key, str, default)
 
-		try:
-			return bool(strtobool(value))
-		except ValueError:
-			return default
+	def get_prop_bool(self, key: str, default: bool = False):
+		return self._get_prop(key, lambda x: bool(strtobool(x)), default)
 
 	def get_prop_int(self, key: str, default: int = 0):
-		value = self.get_prop(key)
-
-		try:
-			return int(value)
-		except ValueError:
-			return default
+		return self._get_prop(key, int, default)
 
 	def get_prop_float(self, key: str, default: float = 0.0):
-		value = self.get_prop(key)
-
-		try:
-			return float(value)
-		except ValueError:
-			return default
+		return self._get_prop(key, float, default)
 
 	def set_prop(self, key: str, value: str):
+		assert isinstance(value, str), f"value must be a string, not {type(value)}"
 		self[key] = value
 
 	def write_to_file(self, path: Path, excluded_props: List[str] = []):
