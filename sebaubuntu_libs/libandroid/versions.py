@@ -56,6 +56,7 @@ class AndroidVersion(_AndroidVersion):
 	R = _AndroidVersion("11", "R", 30)
 	S = _AndroidVersion("12", "S", 31)
 	S_V2 = _AndroidVersion("13", "Sv2", 32)
+	TIRAMISU = _AndroidVersion("14", "Tiramisu", 33)
 
 	_ALL = [
 		BASE,
@@ -90,6 +91,7 @@ class AndroidVersion(_AndroidVersion):
 		R,
 		S,
 		S_V2,
+		TIRAMISU,
 	]
 
 	@staticmethod
