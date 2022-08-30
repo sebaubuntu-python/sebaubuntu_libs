@@ -5,7 +5,11 @@
 #
 """Android library."""
 
+from typing import List
+
 class _AndroidVersion:
+	__ALL: List["_AndroidVersion"] = []
+
 	def __init__(self,
 	             version_code: str,
 	             version_name: str,
@@ -15,13 +19,38 @@ class _AndroidVersion:
 		self.version_name = version_name
 		self.api_version = api_version
 
-		self.version_short = self.__version_short()
-
-	def __version_short(self):
 		version_name_split = self.version_name.split()
-		version_short = version_name_split[0][0]
+		self.version_short = version_name_split[0][0]
 
-		return version_short
+		self.__ALL.append(self)
+
+	@classmethod
+	def from_version_code(cls, version_code: str):
+		for version in cls.__ALL:
+			if version.version_code == version_code:
+				return version
+		return None
+
+	@classmethod
+	def from_version_name(cls, version_name: str):
+		for version in cls.__ALL:
+			if version.version_name == version_name:
+				return version
+		return None
+
+	@classmethod
+	def from_api_version(cls, api_version: int):
+		for version in cls.__ALL:
+			if version.api_version == api_version:
+				return version
+		return None
+
+	@classmethod
+	def from_version_short(cls, version_short: str):
+		for version in cls.__ALL:
+			if version.version_short == version_short:
+				return version
+		return None
 
 class AndroidVersion(_AndroidVersion):
 	BASE = _AndroidVersion("1.0", "1.0", 1)
@@ -57,67 +86,3 @@ class AndroidVersion(_AndroidVersion):
 	S = _AndroidVersion("12", "S", 31)
 	S_V2 = _AndroidVersion("13", "Sv2", 32)
 	TIRAMISU = _AndroidVersion("14", "Tiramisu", 33)
-
-	_ALL = [
-		BASE,
-		BASE_1_1,
-		CUPCAKE,
-		DONUT,
-		ECLAIR,
-		ECLAIR_0_1,
-		ECLAIR_MR1,
-		FROYO,
-		GINGERBREAD,
-		GINGERBREAD_MR1,
-		HONEYCOMB,
-		HONEYCOMB_MR1,
-		HONEYCOMB_MR2,
-		ICE_CREAM_SANDWICH,
-		ICE_CREAM_SANDWICH_MR1,
-		JELLY_BEAN,
-		JELLY_BEAN_MR1,
-		JELLY_BEAN_MR2,
-		KITKAT,
-		KITKAT_WATCH,
-		LOLLIPOP,
-		LOLLIPOP_MR1,
-		M,
-		N,
-		N_MR1,
-		O,
-		O_MR1,
-		P,
-		Q,
-		R,
-		S,
-		S_V2,
-		TIRAMISU,
-	]
-
-	@staticmethod
-	def from_version_code(version_code: str):
-		for version in AndroidVersion._ALL:
-			if version.version_code == version_code:
-				return version
-		return None
-
-	@staticmethod
-	def from_version_name(version_name: str):
-		for version in AndroidVersion._ALL:
-			if version.version_name == version_name:
-				return version
-		return None
-
-	@staticmethod
-	def from_api_version(api_version: int):
-		for version in AndroidVersion._ALL:
-			if version.api_version == api_version:
-				return version
-		return None
-
-	@staticmethod
-	def from_version_short(version_short: str):
-		for version in AndroidVersion._ALL:
-			if version.version_short == version_short:
-				return version
-		return None
