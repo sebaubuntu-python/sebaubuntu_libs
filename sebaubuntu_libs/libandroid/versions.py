@@ -55,7 +55,7 @@ class AndroidVersion(_AndroidVersion):
 	Q = _AndroidVersion("10", "Q", 29)
 	R = _AndroidVersion("11", "R", 30)
 	S = _AndroidVersion("12", "S", 31)
-	Sv2 = _AndroidVersion("13", "Sv2", 32)
+	S_V2 = _AndroidVersion("13", "Sv2", 32)
 
 	_ALL = [
 		BASE,
@@ -89,7 +89,7 @@ class AndroidVersion(_AndroidVersion):
 		Q,
 		R,
 		S,
-		Sv2,
+		S_V2,
 	]
 
 	@staticmethod

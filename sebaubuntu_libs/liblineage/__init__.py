@@ -18,5 +18,5 @@ LINEAGEOS_TO_ANDROID_VERSION = {
 	"18.0": AndroidVersion.R,
 	"18.1": AndroidVersion.R,
 	"19.0": AndroidVersion.S,
-	"19.1": AndroidVersion.Sv2,
+	"19.1": AndroidVersion.S_V2,
 }
