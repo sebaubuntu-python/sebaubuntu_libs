@@ -20,6 +20,7 @@ DEVICE_BRAND = get_product_props("brand")
 DEVICE_MODEL = get_product_props("model")
 
 DEVICE_ARCH = ["ro.bionic.arch"]
+DEVICE_CPU_ABILIST = get_partition_props("ro.{}product.cpu.abilist", add_empty=True)
 DEVICE_CPU_VARIANT = ["ro.bionic.cpu_variant"]
 DEVICE_SECOND_ARCH = ["ro.bionic.2nd_arch"]
 DEVICE_SECOND_CPU_VARIANT = ["ro.bionic.2nd_cpu_variant"]
@@ -57,14 +58,16 @@ class DeviceArch(Enum):
 	def __init__(self,
 	             arch: str,
 	             arch_variant: str,
-	             cpu_abi: str,
-	             cpu_abi2: str = "",
-	             kernel_name: str = "Image"):
+	             bitness: int,
+	             cpu_abilist: List[str],
+	            ):
 		self.arch = arch
 		self.arch_variant = arch_variant
-		self.cpu_abi = cpu_abi
-		self.cpu_abi2 = cpu_abi2
-		self.kernel_name = kernel_name
+		self.bitness = bitness
+		self.cpu_abilist = cpu_abilist
+
+		self.cpu_abi = self.cpu_abilist[0]
+		self.cpu_abi2 = self.cpu_abilist[1] if len(self.cpu_abilist) > 1 else ""
 
 	def __bool__(self):
 		return self.arch != "unknown"
@@ -73,20 +76,29 @@ class DeviceArch(Enum):
 		return self.arch
 
 	@classmethod
-	def from_arch_string(cls, arch: str):
+	def from_arch(cls, arch: str):
 		for arch_enum in cls:
 			if arch_enum.arch != arch:
 				continue
 
 			return arch_enum
 
-		return cls.UNKNOWN
+		raise ValueError(f"Unknown arch: {arch}")
 
-	ARM = ("arm", "armv7-a-neon", "armeabi-v7a", "armeabi", "zImage")
-	ARM64 = ("arm64", "armv8-a", "arm64-v8a", "", "Image.gz")
-	X86 = ("x86", "generic", "x86", "", "bzImage")
-	X86_64 = ("x86_64", "generic", "x86_64", "", "bzImage")
-	UNKNOWN = ("unknown", "generic", "unknown")
+	@classmethod
+	def from_abi(cls, abi: str):
+		for arch_enum in cls:
+			if abi not in arch_enum.cpu_abilist:
+				continue
+
+			return arch_enum
+
+		raise ValueError(f"Unknown ABI: {abi}")
+
+	ARM = ("arm", "armv7-a-neon", 32, ["armeabi-v7a", "armeabi"])
+	ARM64 = ("arm64", "armv8-a", 64, ["arm64-v8a"])
+	X86 = ("x86", "generic", 32, ["x86"])
+	X86_64 = ("x86_64", "generic", 64, ["x86_64"])
 
 bool_cast = lambda x: bool(strtobool(x))
 
@@ -109,13 +121,30 @@ class DeviceInfo:
 		self.build_fingerprint = self.get_first_prop(BUILD_FINGERPRINT)
 		self.build_description = self.get_first_prop(BUILD_DESCRIPTION, default=fingerprint_to_description(self.build_fingerprint))
 
-		self.arch = DeviceArch.from_arch_string(self.get_first_prop(DEVICE_ARCH))
-		self.second_arch = DeviceArch.from_arch_string(self.get_first_prop(DEVICE_SECOND_ARCH))
+		# Parse arch
+		self.arch = None
+		self.second_arch = None
+
+		arch_prop = self.get_first_prop(DEVICE_ARCH, raise_exception=False)
+		second_arch_prop = self.get_first_prop(DEVICE_SECOND_ARCH, raise_exception=False)
+		if arch_prop:
+			self.arch = DeviceArch.from_arch(arch_prop)
+			if second_arch_prop:
+				self.second_arch = DeviceArch.from_arch(second_arch_prop)
+		else:
+			# Fallback to ABI list
+			abi_list = self.get_first_prop(DEVICE_CPU_ABILIST).split(",")
+			assert abi_list, "No ABI list prop found"
+			archs = list(set([DeviceArch.from_abi(abi) for abi in abi_list]))
+			assert 0 < len(archs) <= 2, "Invalid ABI list"
+			# Higher bitness architectures has priority
+			archs.sort(key=lambda x: x.bitness, reverse=True)
+			self.arch = archs[0]
+			if len(archs) > 1:
+				self.second_arch = archs[1]
+
 		self.cpu_variant = self.get_first_prop(DEVICE_CPU_VARIANT, default="generic")
 		self.second_cpu_variant = self.get_first_prop(DEVICE_SECOND_CPU_VARIANT, default="generic")
-		self.device_has_64bit_arch = self.arch in (DeviceArch.ARM64, DeviceArch.X86_64)
-		# TODO: Add 32binder64 detection (it only involves 8.0/8.1 devices so :shrug:)
-		self.device_has_64bit_binder = True
 
 		self.bootloader_board_name = self.get_first_prop(BOOTLOADER_BOARD_NAME)
 		self.platform = self.get_first_prop(DEVICE_PLATFORM, default="default")
