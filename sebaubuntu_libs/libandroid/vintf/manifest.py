@@ -9,12 +9,13 @@ from locale import strcoll
 from pathlib import Path
 from typing import List
 from sebaubuntu_libs.liblogging import LOGW
-from sebaubuntu_libs.libvintf import INDENTATION
-from sebaubuntu_libs.libvintf.aidl import AidlHal
-from sebaubuntu_libs.libvintf.common import Hal
-from sebaubuntu_libs.libvintf.hidl import HidlHal
 from xml.etree import ElementTree
 from textwrap import indent
+
+from sebaubuntu_libs.libandroid.vintf import INDENTATION
+from sebaubuntu_libs.libandroid.vintf.aidl import AidlHal
+from sebaubuntu_libs.libandroid.vintf.common import Hal
+from sebaubuntu_libs.libandroid.vintf.hidl import HidlHal
 
 def strcoll_hal(obj1: Hal, obj2: Hal) -> int:
 	# Sort by name if different

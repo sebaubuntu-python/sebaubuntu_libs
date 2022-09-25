@@ -6,10 +6,11 @@
 
 from typing import List, Set
 from sebaubuntu_libs.libstring import removeprefix
-from sebaubuntu_libs.libvintf import INDENTATION
-from sebaubuntu_libs.libvintf.common import Hal, cast_to_str_key
 from textwrap import indent
 from xml.etree.ElementTree import Element
+
+from sebaubuntu_libs.libandroid.vintf import INDENTATION
+from sebaubuntu_libs.libandroid.vintf.common import Hal, cast_to_str_key
 
 class HidlInterface:
 	"""Class representing a HIDL interface."""

@@ -4,11 +4,12 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-from sebaubuntu_libs.libvintf import INDENTATION
-from sebaubuntu_libs.libvintf.common import Hal, cast_to_str_key
 from textwrap import indent
 from typing import Set
 from xml.etree.ElementTree import Element
+
+from sebaubuntu_libs.libandroid.vintf import INDENTATION
+from sebaubuntu_libs.libandroid.vintf.common import Hal, cast_to_str_key
 
 class AidlInterface:
 	"""Class representing a AIDL HAL."""
