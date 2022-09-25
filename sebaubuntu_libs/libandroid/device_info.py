@@ -5,6 +5,7 @@
 #
 
 from distutils.util import strtobool
+from enum import Enum
 from typing import Any, Callable, List
 
 from sebaubuntu_libs.libandroid.props import BuildProp
@@ -46,7 +47,13 @@ FIRST_API_LEVEL = ["ro.product.first_api_level"]
 PRODUCT_CHARACTERISTICS = ["ro.build.characteristics"]
 APEX_UPDATABLE = ["ro.apex.updatable"]
 
-class _DeviceArch:
+class DeviceArch(Enum):
+	def __new__(cls, *args, **kwargs):
+		value = len(cls.__members__) + 1
+		obj = object.__new__(cls)
+		obj._value_ = value
+		return obj
+
 	def __init__(self,
 	             arch: str,
 	             arch_variant: str,
@@ -65,32 +72,27 @@ class _DeviceArch:
 	def __str__(self):
 		return self.arch
 
-class DeviceArch(_DeviceArch):
-	ARM = _DeviceArch("arm", "armv7-a-neon", "armeabi-v7a", "armeabi", "zImage")
-	ARM64 = _DeviceArch("arm64", "armv8-a", "arm64-v8a", "", "Image.gz")
-	X86 = _DeviceArch("x86", "generic", "x86", "", "bzImage")
-	X86_64 = _DeviceArch("x86_64", "generic", "x86_64", "", "bzImage")
-	UNKNOWN = _DeviceArch("unknown", "generic", "unknown")
-
 	@classmethod
 	def from_arch_string(cls, arch: str):
-		if arch == "arm64":
-			return cls.ARM64
-		if arch == "arm":
-			return cls.ARM
-		if arch == "x86":
-			return cls.X86
-		if arch == "x86_64":
-			return cls.X86_64
+		for arch_enum in cls:
+			if arch_enum.arch != arch:
+				continue
+
+			return arch_enum
 
 		return cls.UNKNOWN
+
+	ARM = ("arm", "armv7-a-neon", "armeabi-v7a", "armeabi", "zImage")
+	ARM64 = ("arm64", "armv8-a", "arm64-v8a", "", "Image.gz")
+	X86 = ("x86", "generic", "x86", "", "bzImage")
+	X86_64 = ("x86_64", "generic", "x86_64", "", "bzImage")
+	UNKNOWN = ("unknown", "generic", "unknown")
 
 bool_cast = lambda x: bool(strtobool(x))
 
 class DeviceInfo:
 	"""
-	This class is responsible for reading parse common build props needed for twrpdtgen
-	by using BuildProp class.
+	This class is responsible for reading parse common build props by using BuildProp class.
 	"""
 
 	def __init__(self, build_prop: BuildProp):
