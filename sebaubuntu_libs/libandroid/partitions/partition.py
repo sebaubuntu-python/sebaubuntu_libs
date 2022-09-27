@@ -27,17 +27,16 @@ def get_dir(path: Path):
 	return dir
 
 class AndroidPartition:
-	def __init__(self, model: PartitionModel, real_path: Path, dump_path: Path):
+	def __init__(self, model: PartitionModel, path: Path):
 		self.model = model
-		self.real_path = real_path
-		self.dump_path = dump_path
+		self.path = path
 
 		self.files: List[Path] = []
 		self.fstab_entry: FstabEntry = None
 
 		self.build_prop = BuildProp()
 		for possible_paths in BUILD_PROP_LOCATION + DEFAULT_PROP_LOCATION:
-			build_prop_path = self.real_path / possible_paths
+			build_prop_path = self.path / possible_paths
 			if not build_prop_path.is_file():
 				continue
 
@@ -45,18 +44,15 @@ class AndroidPartition:
 
 		self.manifest = Manifest()
 		for possible_paths in MANIFEST_LOCATION:
-			manifest_path = self.real_path / possible_paths
+			manifest_path = self.path / possible_paths
 			if not manifest_path.is_file():
 				continue
 
 			self.manifest.import_file(manifest_path)
 
-	def get_relative_path(self):
-		return self.real_path.relative_to(self.dump_path)
-
 	def fill_files(self, files: List[Path]):
 		for file in files:
-			if not is_relative_to(file, self.real_path):
+			if not is_relative_to(file, self.path):
 				continue
 
 			self.files.append(file)
@@ -73,7 +69,7 @@ class AndroidPartition:
 		return self.files
 
 	def get_formatted_file(self, file: Path):
-		return self.model.proprietary_files_prefix / file.relative_to(self.real_path)
+		return self.model.proprietary_files_prefix / file.relative_to(self.path)
 
 	def get_formatted_files(self):
 		return [self.get_formatted_file(file) for file in self.get_files()]

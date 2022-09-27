@@ -22,18 +22,18 @@ class Partitions:
 				if not (system / build_prop_location).is_file():
 					continue
 
-				self.partitions[PartitionModel.SYSTEM] = AndroidPartition(PartitionModel.SYSTEM, system, self.dump_path)
+				self.partitions[PartitionModel.SYSTEM] = AndroidPartition(PartitionModel.SYSTEM, system)
 
 		assert PartitionModel.SYSTEM in self.partitions
 		self.system = self.partitions[PartitionModel.SYSTEM]
 
 		# Search for vendor
-		for vendor in [self.partitions[PartitionModel.SYSTEM].real_path / "vendor", self.dump_path / "vendor"]:
+		for vendor in [self.partitions[PartitionModel.SYSTEM].path / "vendor", self.dump_path / "vendor"]:
 			for build_prop_location in BUILD_PROP_LOCATION:
 				if not (vendor / build_prop_location).is_file():
 					continue
 
-				self.partitions[PartitionModel.VENDOR] = AndroidPartition(PartitionModel.VENDOR, vendor, self.dump_path)
+				self.partitions[PartitionModel.VENDOR] = AndroidPartition(PartitionModel.VENDOR, vendor)
 
 		assert PartitionModel.VENDOR in self.partitions
 		self.vendor = self.partitions[PartitionModel.VENDOR]
@@ -62,8 +62,8 @@ class Partitions:
 
 	def _search_for_partition(self, model: PartitionModel):
 		possible_locations = [
-			self.partitions[PartitionModel.SYSTEM].real_path / model.name,
-			self.partitions[PartitionModel.VENDOR].real_path / model.name,
+			self.partitions[PartitionModel.SYSTEM].path / model.name,
+			self.partitions[PartitionModel.VENDOR].path / model.name,
 			self.dump_path / model.name
 		]
 
@@ -72,4 +72,4 @@ class Partitions:
 				if not (location / build_prop_location).is_file():
 					continue
 
-				self.partitions[model] = AndroidPartition(model, location, self.dump_path)
+				self.partitions[model] = AndroidPartition(model, location)
