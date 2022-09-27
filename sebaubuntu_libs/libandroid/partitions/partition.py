@@ -12,7 +12,6 @@ from sebaubuntu_libs.libandroid.fstab import Fstab, FstabEntry
 from sebaubuntu_libs.libandroid.partitions.partition_model import PartitionModel
 from sebaubuntu_libs.libandroid.props import BuildProp
 from sebaubuntu_libs.libandroid.vintf.manifest import Manifest
-from sebaubuntu_libs.libpath import is_relative_to
 from sebaubuntu_libs.libreorder import strcoll_files_key
 
 BUILD_PROP_LOCATION = ["build.prop", "etc/build.prop"]
@@ -20,18 +19,24 @@ DEFAULT_PROP_LOCATION = ["default.prop", "etc/default.prop"]
 
 MANIFEST_LOCATION = ["manifest.xml", "etc/vintf/manifest.xml"]
 
-def get_dir(path: Path):
-	dir = {}
+def get_files_list(path: Path) -> List[Path]:
+	files = []
+
 	for i in path.iterdir():
-		dir[i.name] = i if i.is_file() else get_dir(i)
-	return dir
+		if i.is_file():
+			files.append(i)
+		else:
+			files.extend(get_files_list(i))
+
+	return files
 
 class AndroidPartition:
 	def __init__(self, model: PartitionModel, path: Path):
 		self.model = model
 		self.path = path
 
-		self.files: List[Path] = []
+		self.files = get_files_list(self.path)
+
 		self.fstab_entry: FstabEntry = None
 
 		self.build_prop = BuildProp()
@@ -49,13 +54,6 @@ class AndroidPartition:
 				continue
 
 			self.manifest.import_file(manifest_path)
-
-	def fill_files(self, files: List[Path]):
-		for file in files:
-			if not is_relative_to(file, self.path):
-				continue
-
-			self.files.append(file)
 
 	def fill_fstab_entry(self, fstab: Fstab):
 		for mount_point in self.model.mount_points:
