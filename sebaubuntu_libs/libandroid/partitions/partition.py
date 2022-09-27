@@ -18,6 +18,8 @@ from sebaubuntu_libs.libreorder import strcoll_files_key
 BUILD_PROP_LOCATION = ["build.prop", "etc/build.prop"]
 DEFAULT_PROP_LOCATION = ["default.prop", "etc/default.prop"]
 
+MANIFEST_LOCATION = ["manifest.xml", "etc/vintf/manifest.xml"]
+
 def get_dir(path: Path):
 	dir = {}
 	for i in path.iterdir():
@@ -42,7 +44,7 @@ class AndroidPartition:
 			self.build_prop.import_props(build_prop_path)
 
 		self.manifest = Manifest()
-		for possible_paths in ["etc/vintf/manifest.xml", "manifest.xml"]:
+		for possible_paths in MANIFEST_LOCATION:
 			manifest_path = self.real_path / possible_paths
 			if not manifest_path.is_file():
 				continue
