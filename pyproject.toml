@@ -11,6 +11,7 @@ repository = "https://github.com/sebaubuntu-python/sebaubuntu_libs"
 python = "^3.8"
 GitPython = "^3.1.27"
 requests = "^2.28.1"
+pyelftools = "^0.29"
 
 [tool.poetry.dev-dependencies]
 
