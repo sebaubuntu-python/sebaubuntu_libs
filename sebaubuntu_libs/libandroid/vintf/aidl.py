@@ -65,7 +65,7 @@ class AidlHal(Hal):
 		assert entry.get("format") == "aidl"
 
 		name = entry.findtext("name")
-		interfaces = set([AidlInterface.from_fqname(interface)
+		interfaces = set([AidlInterface.from_fqname(interface.text)
 		                  for interface in entry.findall("fqname")])
 
 		return cls(name, interfaces)
