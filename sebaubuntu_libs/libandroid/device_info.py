@@ -159,7 +159,7 @@ class DeviceInfo:
 		self.use_vulkan = self.get_first_prop(USE_VULKAN, data_type=bool_cast, default=False)
 		self.gms_clientid_base = self.get_first_prop(GMS_CLIENTID_BASE, default=f"android-{self.manufacturer}")
 		self.first_api_level = self.get_first_prop(FIRST_API_LEVEL)
-		self.product_characteristics = self.get_first_prop(PRODUCT_CHARACTERISTICS)
+		self.product_characteristics = self.get_first_prop(PRODUCT_CHARACTERISTICS, default="")
 
 		self.build_security_patch = self.get_first_prop(BUILD_SECURITY_PATCH)
 		self.vendor_build_security_patch = self.get_first_prop(BUILD_VENDOR_SECURITY_PATCH, default=self.build_security_patch)
