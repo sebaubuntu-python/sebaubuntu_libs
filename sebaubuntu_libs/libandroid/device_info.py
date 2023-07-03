@@ -118,8 +118,10 @@ class DeviceInfo:
 		self.manufacturer = self.get_first_prop(DEVICE_MANUFACTURER).split()[0].lower()
 		self.brand = self.get_first_prop(DEVICE_BRAND, raise_exception=False)
 		self.model = self.get_first_prop(DEVICE_MODEL, raise_exception=False)
-		self.build_fingerprint = self.get_first_prop(BUILD_FINGERPRINT)
-		self.build_description = self.get_first_prop(BUILD_DESCRIPTION, default=fingerprint_to_description(self.build_fingerprint))
+		self.build_fingerprint = self.get_first_prop(BUILD_FINGERPRINT, raise_exception=False)
+		self.build_description = self.get_first_prop(
+			BUILD_DESCRIPTION, default=fingerprint_to_description(self.build_fingerprint) if self.build_fingerprint else None
+		)
 
 		# Parse arch
 		self.arch = None
