@@ -20,7 +20,7 @@ DEVICE_BRAND = get_product_props("brand")
 DEVICE_MODEL = get_product_props("model")
 
 DEVICE_ARCH = ["ro.bionic.arch"]
-DEVICE_CPU_ABILIST = get_partition_props("ro.{}product.cpu.abilist", add_empty=True)
+DEVICE_CPU_ABILIST = [*get_partition_props("ro.{}product.cpu.abilist", add_empty=True), "ro.product.cpu.abi", "ro.product.cpu.abi2"] # For Android 4.4 and lower
 DEVICE_CPU_VARIANT = ["ro.bionic.cpu_variant"]
 DEVICE_SECOND_ARCH = ["ro.bionic.2nd_arch"]
 DEVICE_SECOND_CPU_VARIANT = ["ro.bionic.2nd_cpu_variant"]
@@ -44,7 +44,7 @@ GMS_CLIENTID_BASE = ["ro.com.google.clientidbase.ms", "ro.com.google.clientidbas
 BUILD_SECURITY_PATCH = ["ro.build.version.security_patch"]
 BUILD_VENDOR_SECURITY_PATCH = ["ro.vendor.build.security_patch"]
 
-FIRST_API_LEVEL = ["ro.product.first_api_level"]
+FIRST_API_LEVEL = ["ro.product.first_api_level", "ro.build.version.sdk"] # Fallback to ro.build.version.sdk
 PRODUCT_CHARACTERISTICS = ["ro.build.characteristics"]
 APEX_UPDATABLE = ["ro.apex.updatable"]
 
@@ -163,7 +163,7 @@ class DeviceInfo:
 		self.first_api_level = self.get_first_prop(FIRST_API_LEVEL)
 		self.product_characteristics = self.get_first_prop(PRODUCT_CHARACTERISTICS, default="")
 
-		self.build_security_patch = self.get_first_prop(BUILD_SECURITY_PATCH)
+		self.build_security_patch = self.get_first_prop(BUILD_SECURITY_PATCH, default="1970-01-01") # Older Androids don't have this prop
 		self.vendor_build_security_patch = self.get_first_prop(BUILD_VENDOR_SECURITY_PATCH, default=self.build_security_patch)
 
 	def get_first_prop(self, props: List[str], data_type: Callable[[str], Any] = str,

@@ -38,7 +38,16 @@ class FstabEntry:
 
 	@classmethod
 	def from_entry(cls, line: str):
-		src, mount_point, fs_type, mnt_flags, fs_flags = line.split()
+		splited = line.split()
+		if len(splited) < 5:
+			raise ValueError("Invalid fstab entry")
+		else:
+			src = splited[0]
+			mount_point = splited[1]
+			fs_type = splited[2]
+			mnt_flags = splited[3]
+			fs_flags = splited[4]
+			# Some devices have `device2` in fstab
 
 		return cls(src, mount_point, fs_type, mnt_flags.split(','), fs_flags.split(','))
 
