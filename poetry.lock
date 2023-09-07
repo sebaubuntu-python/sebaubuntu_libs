@@ -136,13 +136,13 @@ files = [
 
 [[package]]
 name = "pyelftools"
-version = "0.29"
+version = "0.30"
 description = "Library for analyzing ELF files and DWARF debugging information"
 optional = false
 python-versions = "*"
 files = [
-    {file = "pyelftools-0.29-py2.py3-none-any.whl", hash = "sha256:519f38cf412f073b2d7393aa4682b0190fa901f7c3fa0bff2b82d537690c7fc1"},
-    {file = "pyelftools-0.29.tar.gz", hash = "sha256:ec761596aafa16e282a31de188737e5485552469ac63b60cfcccf22263fd24ff"},
+    {file = "pyelftools-0.30-py2.py3-none-any.whl", hash = "sha256:544c3440eddb9a0dce70b6611de0b28163d71def759d2ed57a0d00118fc5da86"},
+    {file = "pyelftools-0.30.tar.gz", hash = "sha256:2fc92b0d534f8b081f58c7c370967379123d8e00984deb53c209364efd575b40"},
 ]
 
 [[package]]
@@ -197,4 +197,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "829acce8c89e647e57262566733501f0cfba2c09efe2338abba5393ff273dee3"
+content-hash = "41c92271a8e30ec65af6eac5dd4af7af1c739713c28723d2329d7bcaed0f7e5c"
