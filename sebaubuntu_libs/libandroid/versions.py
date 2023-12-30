@@ -10,11 +10,12 @@ from typing import List
 class _AndroidVersion:
 	__ALL: List["_AndroidVersion"] = []
 
-	def __init__(self,
-	             version_code: str,
-	             version_name: str,
-	             api_version: int,
-	            ):
+	def __init__(
+		self,
+		version_code: str,
+		version_name: str,
+		api_version: int,
+	):
 		self.version_code = version_code
 		self.version_name = version_name
 		self.api_version = api_version
@@ -86,3 +87,4 @@ class AndroidVersion(_AndroidVersion):
 	S = _AndroidVersion("12", "S", 31)
 	S_V2 = _AndroidVersion("13", "Sv2", 32)
 	TIRAMISU = _AndroidVersion("14", "Tiramisu", 33)
+	UPSIDE_DOWN_CAKE = _AndroidVersion("15", "UpsideDownCake", 34)
