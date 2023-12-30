@@ -18,12 +18,13 @@ from typing import List
 class _PartitionModel:
 	ALL: List[_PartitionModel] = []
 
-	def __init__(self,
-	             name: str,
-	             group: int,
-				 mount_points: List[str] = None,
-				 proprietary_files_prefix: Path = None,
-	            ):
+	def __init__(
+		self,
+		name: str,
+		group: int,
+		mount_points: List[str] = None,
+		proprietary_files_prefix: Path = None,
+	):
 		self.name = name
 		self.group = group
 		self.mount_points = mount_points
@@ -58,6 +59,8 @@ class _PartitionModel:
 		return None
 
 class PartitionModel(_PartitionModel):
+	# system/core/fastboot/fastboot.cpp
+
 	BOOT = _PartitionModel("boot", BOOTLOADER)
 	DTBO = _PartitionModel("dtbo", BOOTLOADER)
 	RECOVERY = _PartitionModel("recovery", BOOTLOADER)
@@ -65,10 +68,14 @@ class PartitionModel(_PartitionModel):
 	VBMETA = _PartitionModel("vbmeta", BOOTLOADER)
 	VBMETA_SYSTEM = _PartitionModel("vbmeta_system", BOOTLOADER)
 	VBMETA_VENDOR = _PartitionModel("vbmeta_vendor", BOOTLOADER)
+	VENDOR_BOOT = _PartitionModel("vendor_boot", BOOTLOADER)
+	VENDOR_KERNEL_BOOT = _PartitionModel("vendor_kernel_boot", BOOTLOADER)
+	INIT_BOOT = _PartitionModel("init_boot", BOOTLOADER)
 
 	SYSTEM = _PartitionModel("system", SSI, ["/system", "/"], Path(""))
 	PRODUCT = _PartitionModel("product", SSI)
 	SYSTEM_EXT = _PartitionModel("system_ext", SSI)
+	SYSTEM_DLKM = _PartitionModel("system_dlkm", SSI)
 
 	VENDOR = _PartitionModel("vendor", TREBLE)
 	ODM = _PartitionModel("odm", TREBLE)
