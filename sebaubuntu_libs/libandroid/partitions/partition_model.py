@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
 (
 	BOOTLOADER,
@@ -22,19 +22,13 @@ class _PartitionModel:
 		self,
 		name: str,
 		group: int,
-		mount_points: List[str] = None,
-		proprietary_files_prefix: Path = None,
+		mount_points: Optional[List[str]] = None,
+		proprietary_files_prefix: Optional[Path] = None,
 	):
 		self.name = name
 		self.group = group
-		self.mount_points = mount_points
-		self.proprietary_files_prefix = proprietary_files_prefix
-
-		if self.mount_points is None:
-			self.mount_points = [f"/{self.name}"]
-
-		if self.proprietary_files_prefix is None:
-			self.proprietary_files_prefix = Path(self.name)
+		self.mount_points = mount_points or [f"/{self.name}"]
+		self.proprietary_files_prefix = proprietary_files_prefix or Path(self.name)
 
 		_PartitionModel.ALL.append(self)
 

@@ -15,10 +15,11 @@ else:
 	AndroidPartition = None
 
 class SharedLibrary:
-	def __init__(self,
-	             name: str,
-	             partition: AndroidPartition,
-	            ):
+	def __init__(
+		self,
+		name: str,
+		partition: AndroidPartition,
+	):
 		self.name = name
 		self.partition = partition
 
@@ -32,18 +33,32 @@ class SharedLibrary:
 
 		assert self.lib_32 or self.lib_64, f"Library {self.name} not found in {self.partition.path}"
 
-		if self.is_multilib():
-			assert (self.lib_32.needed_libraries == self.lib_64.needed_libraries,
-			        f"32-bit and 64-bit versions of {self.name} have different dependencies")
+		needed_libraries_32 = self.lib_32.needed_libraries if self.lib_32 else None
+		needed_libraries_64 = self.lib_64.needed_libraries if self.lib_64 else None
 
-		self.needed_libraries = (self.lib_64.needed_libraries
-		                         if self.lib_64
-		                         else self.lib_32.needed_libraries)
+		if needed_libraries_32 is not None and needed_libraries_64 is not None:
+			if needed_libraries_32 != needed_libraries_64:
+				raise ValueError(
+					f"32-bit and 64-bit versions of {self.name} have different dependencies"
+				)
+
+		self.needed_libraries = (
+			self.lib_64.needed_libraries
+			if self.lib_64 is not None
+			else self.lib_32.needed_libraries
+			if self.lib_32 is not None
+			else set()
+		)
 
 	def is_multilib(self) -> bool:
 		"""Check if this library is multilib (both 32 and 64bit)."""
-		return self.lib_32 and self.lib_64
+		return self.lib_32 is not None and self.lib_64 is not None
 
 	def get_path(self) -> Path:
 		"""Get either 64bit library path if exists, else 32bit one."""
-		return self.lib_64.path if self.lib_64 else self.lib_32.path
+		if self.lib_64:
+			return self.lib_64.path
+		elif self.lib_32:
+			return self.lib_32.path
+		else:
+			raise ValueError("Library not found")

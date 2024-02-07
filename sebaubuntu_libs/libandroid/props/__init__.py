@@ -8,7 +8,7 @@
 from __future__ import annotations
 from distutils.util import strtobool
 from pathlib import Path
-from typing import Any, Callable, List, Union
+from typing import Any, Callable, List, Optional, Union
 
 class BuildProp(dict):
 	"""
@@ -58,16 +58,16 @@ class BuildProp(dict):
 		else:
 			return default
 
-	def get_prop(self, key: str, default: str = None):
+	def get_prop(self, key: str, default: Optional[str] = None) -> Optional[str]:
 		return self._get_prop(key, str, default)
 
-	def get_prop_bool(self, key: str, default: bool = False):
+	def get_prop_bool(self, key: str, default: bool = False) -> bool:
 		return self._get_prop(key, lambda x: bool(strtobool(x)), default)
 
-	def get_prop_int(self, key: str, default: int = 0):
+	def get_prop_int(self, key: str, default: int = 0) -> int:
 		return self._get_prop(key, int, default)
 
-	def get_prop_float(self, key: str, default: float = 0.0):
+	def get_prop_float(self, key: str, default: float = 0.0) -> float:
 		return self._get_prop(key, float, default)
 
 	def set_prop(self, key: str, value: str):

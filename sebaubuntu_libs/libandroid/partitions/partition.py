@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
 from sebaubuntu_libs.libandroid.fstab import Fstab, FstabEntry
 from sebaubuntu_libs.libandroid.partitions.partition_model import PartitionModel
@@ -37,7 +37,7 @@ class AndroidPartition:
 
 		self.files = get_files_list(self.path)
 
-		self.fstab_entry: FstabEntry = None
+		self.fstab_entry: Optional[FstabEntry] = None
 
 		self.build_prop = BuildProp()
 		for possible_paths in BUILD_PROP_LOCATION + DEFAULT_PROP_LOCATION:

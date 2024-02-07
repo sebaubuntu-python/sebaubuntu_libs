@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-from typing import List, Set
+from typing import List, Optional, Set
 from sebaubuntu_libs.libstring import removeprefix
 from textwrap import indent
 from xml.etree.ElementTree import Element
@@ -46,8 +46,12 @@ class HidlInterface:
 	def from_interface(cls, version: str, interface: Element) -> List['HidlInterface']:
 		"""Create a AIDL HAL from an interface."""
 		name = interface.findtext("name")
+		assert name is not None, "Missing name in HIDL interface"
 
-		return [cls(name, version, instance.text) for instance in interface.findall("instance")]
+		return [
+			HidlInterface(name, version, instance.text)
+			for instance in interface.findall("instance")
+		]
 
 	@classmethod
 	def from_interfaces(cls, version: str, interfaces: List[Element]) -> List['HidlInterface']:
@@ -57,7 +61,7 @@ class HidlInterface:
 
 class HidlTransport:
 	"""Class representing a HIDL transport type."""
-	def __init__(self, name: str, passthrough_arch: str = None):
+	def __init__(self, name: str, passthrough_arch: Optional[str] = None):
 		"""Initialize an object."""
 		self.name = name
 		self.passthrough_arch = passthrough_arch
@@ -81,6 +85,8 @@ class HidlTransport:
 	def from_element(cls, element: Element):
 		"""Get a HidlTransport from an XML element."""
 		name = element.text
+		assert name is not None, "Missing name in HIDL transport"
+
 		passthrough_arch = None
 		if name == "passthrough":
 			passthrough_arch = element.get("arch")
@@ -125,6 +131,8 @@ class HidlHal(Hal):
 		transport = HidlTransport.from_element(entry.find("transport"))
 
 		version = entry.findtext("version")
+		assert version is not None, "Missing version in HIDL HAL"
+
 		interfaces = [
 			HidlInterface.from_fqname(interface.text) for interface in entry.findall("fqname")
 		]

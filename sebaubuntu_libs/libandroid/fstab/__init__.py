@@ -17,13 +17,14 @@ class FstabEntry:
 	"""
 	A class representing a fstab entry
 	"""
-	def __init__(self,
-	             src: str,
-	             mount_point: str,
-	             fs_type: str,
-	             mnt_flags: List[str],
-	             fs_flags: List[str],
-	            ):
+	def __init__(
+		self,
+		src: str,
+		mount_point: str,
+		fs_type: str,
+		mnt_flags: List[str],
+		fs_flags: List[str],
+	):
 		self.src = src
 		self.mount_point = mount_point
 		self.fs_type = fs_type

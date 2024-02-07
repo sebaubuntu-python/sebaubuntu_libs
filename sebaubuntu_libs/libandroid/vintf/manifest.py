@@ -7,7 +7,7 @@
 from functools import cmp_to_key
 from locale import strcoll
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 from sebaubuntu_libs.liblogging import LOGW
 from xml.etree import ElementTree
 from textwrap import indent
@@ -40,8 +40,8 @@ class Manifest:
 	def __init__(self):
 		"""Parse a VINTF manifest."""
 		self.version = None
-		self.type: str = None
-		self.target_level: str = None
+		self.type: Optional[str] = None
+		self.target_level: Optional[str] = None
 		self.entries: List[Hal] = []
 
 	def __str__(self):

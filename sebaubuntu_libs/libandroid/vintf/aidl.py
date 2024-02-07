@@ -65,6 +65,8 @@ class AidlHal(Hal):
 		assert entry.get("format") == "aidl"
 
 		name = entry.findtext("name")
+		assert name is not None, "Missing name in AIDL HAL"
+
 		interfaces = set([AidlInterface.from_fqname(interface.text)
 		                  for interface in entry.findall("fqname")])
 

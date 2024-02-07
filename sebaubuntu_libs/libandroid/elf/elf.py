@@ -7,7 +7,7 @@
 from elftools.common.exceptions import ELFError
 from elftools.elf.elffile import ELFFile
 from pathlib import Path
-from typing import List
+from typing import Set
 
 class ELF:
 	def __init__(self, path: Path):
@@ -20,8 +20,8 @@ class ELF:
 		self.needed_libraries = self.get_needed_libs(self.path)
 
 	@classmethod
-	def get_needed_libs(cls, file: Path) -> List[str]:
-		needed_libs = []
+	def get_needed_libs(cls, file: Path) -> Set[str]:
+		needed_libs: Set[str] = set()
 
 		with file.open("rb") as f:
 			try:
@@ -29,7 +29,7 @@ class ELF:
 				dynsec = elf.get_section_by_name(".dynamic")
 				if dynsec:
 					for dt_needed in dynsec.iter_tags("DT_NEEDED"):
-						needed_libs.append(str(dt_needed.needed))
+						needed_libs.add(str(dt_needed.needed))
 			except ELFError:
 				pass
 
