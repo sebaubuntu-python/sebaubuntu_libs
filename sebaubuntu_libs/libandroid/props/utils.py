@@ -4,15 +4,13 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+from sebaubuntu_libs.libandroid.partitions.partition_model import PartitionModel, SSI, TREBLE
+
 PARTITIONS = [
+	partition.name
+	for partition in PartitionModel.from_group(SSI) + PartitionModel.from_group(TREBLE)
+] + [
 	"bootimage",
-	"odm",
-	"odm_dlkm",
-	"product",
-	"system",
-	"system_ext",
-	"vendor",
-	"vendor_dlkm",
 ]
 
 def get_partition_props(format_string: str, add_empty: bool = False):
