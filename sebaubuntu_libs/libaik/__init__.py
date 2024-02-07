@@ -12,6 +12,7 @@ from sebaubuntu_libs.liblogging import LOGD, LOGI
 from shutil import which
 from subprocess import check_output, STDOUT, CalledProcessError
 from tempfile import TemporaryDirectory
+from typing import Optional
 
 AIK_REPO = "https://github.com/SebaUbuntu/AIK-Linux-mirror"
 
@@ -21,27 +22,28 @@ ALLOWED_OS = [
 ]
 
 class AIKImageInfo:
-	def __init__(self,
-	             base_address: str,
-	             board_name: str,
-	             cmdline: str,
-	             dt: Path,
-	             dtb: Path,
-	             dtb_offset: str,
-	             dtbo: Path,
-	             header_version: str,
-	             image_type: str,
-	             kernel: Path,
-	             kernel_offset: str,
-	             origsize: str,
-	             os_version: str,
-	             pagesize: str,
-	             ramdisk: Path,
-	             ramdisk_compression: str,
-	             ramdisk_offset: str,
-	             sigtype: str,
-	             tags_offset: str,
-	            ):
+	def __init__(
+		self,
+		base_address: Optional[str],
+		board_name: Optional[str],
+		cmdline: Optional[str],
+		dt: Optional[Path],
+		dtb: Optional[Path],
+		dtb_offset: Optional[str],
+		dtbo: Optional[Path],
+		header_version: Optional[str],
+		image_type: Optional[str],
+		kernel: Optional[Path],
+		kernel_offset: Optional[str],
+		origsize: Optional[str],
+		os_version: Optional[str],
+		pagesize: Optional[str],
+		ramdisk: Optional[Path],
+		ramdisk_compression: Optional[str],
+		ramdisk_offset: Optional[str],
+		sigtype: Optional[str],
+		tags_offset: Optional[str],
+	):
 		self.kernel = kernel
 		self.dt = dt
 		self.dtb = dtb
@@ -181,7 +183,9 @@ class AIKManager:
 			tags_offset=self._read_recovery_file(prefix, "tags_offset"),
 		)
 
-	def _read_recovery_file(self, prefix: str, fragment: str, default: str = None) -> str:
+	def _read_recovery_file(
+		self, prefix: str, fragment: str, default: Optional[str] = None
+	) -> Optional[str]:
 		file = self._get_extracted_info(prefix, fragment)
 		return file.read_text().splitlines()[0].strip() if file.exists() else default
 
