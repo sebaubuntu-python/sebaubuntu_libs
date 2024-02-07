@@ -4,24 +4,30 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-from __future__ import annotations
+from enum import IntEnum
 from pathlib import Path
 from typing import List, Optional
+
+class PartitionGroup(IntEnum):
+	BOOTLOADER = 0
+	SSI = 1
+	TREBLE = 2
+	DATA = 3
 
 (
 	BOOTLOADER,
 	SSI,
 	TREBLE,
 	DATA,
-) = range(4)
+) = PartitionGroup.__members__.values()
 
 class _PartitionModel:
-	ALL: List[_PartitionModel] = []
+	ALL: List["_PartitionModel"] = []
 
 	def __init__(
 		self,
 		name: str,
-		group: int,
+		group: PartitionGroup,
 		mount_points: Optional[List[str]] = None,
 		proprietary_files_prefix: Optional[Path] = None,
 	):
@@ -41,7 +47,7 @@ class _PartitionModel:
 		return None
 
 	@classmethod
-	def from_group(cls, group: int):
+	def from_group(cls, group: PartitionGroup):
 		return [model for model in cls.ALL if model.group == group]
 
 	@classmethod
