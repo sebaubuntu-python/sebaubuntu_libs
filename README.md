@@ -14,7 +14,7 @@ pip3 install sebaubuntu_libs
 
 ## Documentation
 
-Complete documentation at [Read the Docs](https://sebaubuntu_libs.readthedocs.io)
+Complete documentation at [Read the Docs](https://sebaubuntu-libs.readthedocs.io)
 
 # License
 
