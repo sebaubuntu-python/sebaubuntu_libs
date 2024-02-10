@@ -131,12 +131,15 @@ class HidlHal(Hal):
 		transport = HidlTransport.from_element(entry.find("transport"))
 
 		version = entry.findtext("version")
-		assert version is not None, "Missing version in HIDL HAL"
 
 		interfaces = [
 			HidlInterface.from_fqname(interface.text) for interface in entry.findall("fqname")
 		]
-		interfaces.extend(HidlInterface.from_interfaces(version, entry.findall("interface")))
+		interface_elements = entry.findall("interface")
+		if len(interface_elements) > 0:
+			assert version is not None, "Missing version in HIDL HAL"
+			interfaces.extend(HidlInterface.from_interfaces(version, interface_elements))
+
 		interfaces = set(interfaces)
 
 		return cls(name, transport, interfaces)
