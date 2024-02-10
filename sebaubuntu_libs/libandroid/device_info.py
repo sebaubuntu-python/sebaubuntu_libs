@@ -48,6 +48,9 @@ FIRST_API_LEVEL = ["ro.product.first_api_level"]
 PRODUCT_CHARACTERISTICS = ["ro.build.characteristics"]
 APEX_UPDATABLE = ["ro.apex.updatable"]
 
+BOARD_FIRST_API_LEVEL = ["ro.board.first_api_level"]
+BOARD_API_LEVEL = ["ro.board.api_level"]
+
 class DeviceArch(Enum):
 	def __new__(cls, *args, **kwargs):
 		value = len(cls.__members__) + 1
@@ -165,6 +168,9 @@ class DeviceInfo:
 
 		self.build_security_patch = self.get_first_prop(BUILD_SECURITY_PATCH)
 		self.vendor_build_security_patch = self.get_first_prop(BUILD_VENDOR_SECURITY_PATCH, default=self.build_security_patch)
+
+		self.board_first_api_level = self.get_first_prop(BOARD_FIRST_API_LEVEL, raise_exception=False)
+		self.board_api_level = self.get_first_prop(BOARD_API_LEVEL, raise_exception=False)
 
 	def get_first_prop(self, props: List[str], data_type: Callable[[str], Any] = str,
 	                   default: Any = None, raise_exception: bool = True):
