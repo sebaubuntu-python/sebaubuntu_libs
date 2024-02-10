@@ -130,6 +130,18 @@ class Fstab:
 	def get_logical_partitions(self):
 		return [entry for entry in self.entries if entry.is_logical()]
 
+	def get_logical_partitions_models(self) -> Set[PartitionModel]:
+		models = set()
+
+		for entry in self.entries:
+			if entry.is_logical():
+				partition_model = PartitionModel.from_mount_point(entry.mount_point)
+				if partition_model is None:
+					continue
+				models.add(partition_model)
+
+		return models
+
 	def get_slotselect_partitions(self):
 		return [entry for entry in self.entries if entry.is_slotselect()]
 
