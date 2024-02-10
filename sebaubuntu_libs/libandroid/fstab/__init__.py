@@ -7,7 +7,7 @@
 
 from itertools import repeat
 from pathlib import Path
-from typing import List
+from typing import List, Set
 
 from sebaubuntu_libs.libandroid.partitions.partition_model import PartitionModel
 
@@ -133,13 +133,13 @@ class Fstab:
 	def get_slotselect_partitions(self):
 		return [entry for entry in self.entries if entry.is_slotselect()]
 
-	def get_ab_partitions_models(self) -> List[PartitionModel]:
-		models = []
+	def get_ab_partitions_models(self) -> Set[PartitionModel]:
+		models = set()
 
 		for entry in self.get_slotselect_partitions():
 			partition_model = PartitionModel.from_mount_point(entry.mount_point)
 			if partition_model is None:
 				continue
-			models.append(partition_model)
+			models.add(partition_model)
 
 		return models
