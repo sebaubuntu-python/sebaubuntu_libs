@@ -8,7 +8,7 @@
 from git import Repo
 from pathlib import Path
 from platform import system
-from sebaubuntu_libs.liblogging import LOGD, LOGI
+from sebaubuntu_libs.liblogging import LOGI
 from shutil import which
 from subprocess import check_output, STDOUT, CalledProcessError
 from tempfile import TemporaryDirectory
@@ -88,6 +88,8 @@ class AIKManager:
 	such as cloning, updating, and extracting recovery images.
 	"""
 
+	UNPACKING_FAILED_STRING = "Unpacking failed, try without --nosudo."
+
 	def __init__(self):
 		"""Initialize AIKManager class."""
 		if system() not in ALLOWED_OS:
@@ -106,7 +108,7 @@ class AIKManager:
 		LOGI("Cloning AIK...")
 		Repo.clone_from(AIK_REPO, self.path)
 
-	def unpackimg(self, image: Path):
+	def unpackimg(self, image: Path, ignore_ramdisk_errors: bool = False):
 		"""Extract recovery image."""
 		image_prefix = image.name
 
@@ -120,8 +122,14 @@ class AIKManager:
 			output = process
 
 		if returncode != 0:
-			LOGD(output)
-			raise RuntimeError(f"AIK extraction failed, return code {returncode}")
+			if self.UNPACKING_FAILED_STRING in output and ignore_ramdisk_errors:
+				# Delete ramdisk folder to avoid issues
+				try:
+					self.ramdisk_path.rmdir()
+				except Exception:
+					pass
+			else:
+				raise RuntimeError(f"AIK extraction failed, return code {returncode}")
 
 		return self._get_current_extracted_info(image_prefix)
 
