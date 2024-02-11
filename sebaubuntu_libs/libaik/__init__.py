@@ -123,7 +123,7 @@ class AIKManager:
 			LOGD(output)
 			raise RuntimeError(f"AIK extraction failed, return code {returncode}")
 
-		return self.get_current_extracted_info(image_prefix)
+		return self._get_current_extracted_info(image_prefix)
 
 	def repackimg(self):
 		return self._execute_script("repack.sh")
@@ -131,53 +131,27 @@ class AIKManager:
 	def cleanup(self):
 		return self._execute_script("cleanup.sh")
 
-	def get_current_extracted_info(self, prefix: str):
-		cmdline = None
-		for name in ["cmdline", "vendor_cmdline"]:
-			_cmdline = self._read_recovery_file(prefix, name)
-			if _cmdline:
-				cmdline = _cmdline
-
-		dt = self._get_extracted_info(prefix, "dt")
-		dt = dt if dt.is_file() else None
-
-		dtb = self._get_extracted_info(prefix, "dtb")
-		dtb = dtb if dtb.is_file() else None
-
-		dtbo = None
-		for name in ["dtbo", "recovery_dtbo"]:
-			_dtbo = self._get_extracted_info(prefix, name)
-			if _dtbo.is_file():
-				dtbo = _dtbo
-
-		kernel = self._get_extracted_info(prefix, "kernel")
-		kernel = kernel if kernel.is_file() else None
-
-		ramdisk = self.ramdisk_path if self.ramdisk_path.is_dir() else None
-
-		ramdisk_compression = None
-		for name in ["ramdiskcomp", "vendor_ramdiskcomp"]:
-			_ramdisk_compression = self._read_recovery_file(prefix, name)
-			if ramdisk_compression:
-				ramdisk_compression = _ramdisk_compression
-
+	def _get_current_extracted_info(self, prefix: str):
 		return AIKImageInfo(
 			base_address=self._read_recovery_file(prefix, "base"),
 			board_name=self._read_recovery_file(prefix, "board"),
-			cmdline=cmdline,
-			dt=dt,
-			dtb=dtb,
+			cmdline=self._read_recovery_file(prefix, "cmdline") \
+				or self._read_recovery_file(prefix, "vendor_cmdline"),
+			dt=self._get_extracted_info(prefix, "dt", check_size=True),
+			dtb=self._get_extracted_info(prefix, "dtb", check_size=True),
 			dtb_offset=self._read_recovery_file(prefix, "dtb_offset"),
-			dtbo=dtbo,
+			dtbo=self._get_extracted_info(prefix, "dtbo", check_size=True) \
+				or self._get_extracted_info(prefix, "recovery_dtbo", check_size=True),
 			header_version=self._read_recovery_file(prefix, "header_version", default="0"),
 			image_type=self._read_recovery_file(prefix, "imgtype"),
-			kernel=kernel,
+			kernel=self._get_extracted_info(prefix, "kernel", check_size=True),
 			kernel_offset=self._read_recovery_file(prefix, "kernel_offset"),
 			origsize=self._read_recovery_file(prefix, "origsize"),
 			os_version=self._read_recovery_file(prefix, "os_version"),
 			pagesize=self._read_recovery_file(prefix, "pagesize"),
-			ramdisk=ramdisk,
-			ramdisk_compression=ramdisk_compression,
+			ramdisk=self.ramdisk_path if self.ramdisk_path.is_dir() else None,
+			ramdisk_compression=self._read_recovery_file(prefix, "ramdiskcomp") \
+				or self._read_recovery_file(prefix, "vendor_ramdiskcomp"),
 			ramdisk_offset=self._read_recovery_file(prefix, "ramdisk_offset"),
 			sigtype=self._read_recovery_file(prefix, "sigtype"),
 			tags_offset=self._read_recovery_file(prefix, "tags_offset"),
@@ -187,10 +161,26 @@ class AIKManager:
 		self, prefix: str, fragment: str, default: Optional[str] = None
 	) -> Optional[str]:
 		file = self._get_extracted_info(prefix, fragment)
-		return file.read_text().splitlines()[0].strip() if file.exists() else default
+		if not file:
+			return default
 
-	def _get_extracted_info(self, prefix: str, fragment: str) -> Path:
-		return self.images_path / f"{prefix}-{fragment}"
+		return file.read_text().splitlines()[0].strip()
+
+	def _get_extracted_info(
+		self, prefix: str, fragment: str, check_size: bool = False
+	) -> Optional[Path]:
+		path = self.images_path / f"{prefix}-{fragment}"
+
+		if not path.is_file():
+			return None
+
+		try:
+			if check_size and path.stat().st_size == 0:
+				return None
+		except Exception:
+			return None
+
+		return path
 
 	def _execute_script(self, script: str, *args):
 		command = [self.path / script, "--nosudo", *args]
