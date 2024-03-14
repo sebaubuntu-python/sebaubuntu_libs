@@ -331,13 +331,13 @@ files = [
 
 [[package]]
 name = "pyelftools"
-version = "0.30"
+version = "0.31"
 description = "Library for analyzing ELF files and DWARF debugging information"
 optional = false
 python-versions = "*"
 files = [
-    {file = "pyelftools-0.30-py2.py3-none-any.whl", hash = "sha256:544c3440eddb9a0dce70b6611de0b28163d71def759d2ed57a0d00118fc5da86"},
-    {file = "pyelftools-0.30.tar.gz", hash = "sha256:2fc92b0d534f8b081f58c7c370967379123d8e00984deb53c209364efd575b40"},
+    {file = "pyelftools-0.31-py3-none-any.whl", hash = "sha256:f52de7b3c7e8c64c8abc04a79a1cf37ac5fb0b8a49809827130b858944840607"},
+    {file = "pyelftools-0.31.tar.gz", hash = "sha256:c774416b10310156879443b81187d182d8d9ee499660380e645918b50bc88f99"},
 ]
 
 [[package]]
@@ -604,4 +604,4 @@ docs = ["sphinx", "sphinx-rtd-theme"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "d19a0921c20d95419d755e8a309b0b2c8ae6a17b5d10c279405bd50fed9eb8b4"
+content-hash = "7fa42914cbbb9d834110adff90353390d184438e5d6c991bbe5413c585e79e66"
