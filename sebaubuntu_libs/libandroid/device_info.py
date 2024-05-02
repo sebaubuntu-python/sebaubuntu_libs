@@ -4,12 +4,12 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-from distutils.util import strtobool
 from enum import Enum
 from typing import Any, Callable, List
 
 from sebaubuntu_libs.libandroid.props import BuildProp
 from sebaubuntu_libs.libandroid.props.utils import fingerprint_to_description, get_partition_props
+from sebaubuntu_libs.libcompat.distutils.util import strtobool
 
 def get_product_props(value: str):
 	return get_partition_props("ro.product.{}" + value, add_empty=True)

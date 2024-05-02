@@ -6,9 +6,10 @@
 """Android build prop library."""
 
 from __future__ import annotations
-from distutils.util import strtobool
 from pathlib import Path
 from typing import Any, Callable, List, Optional, Union
+
+from sebaubuntu_libs.libcompat.distutils.util import strtobool
 
 class BuildProp(dict):
 	"""
