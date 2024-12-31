@@ -88,3 +88,4 @@ class AndroidVersion(_AndroidVersion):
 	S_V2 = _AndroidVersion("12L", "Sv2", 32)
 	TIRAMISU = _AndroidVersion("13", "Tiramisu", 33)
 	UPSIDE_DOWN_CAKE = _AndroidVersion("14", "UpsideDownCake", 34)
+	VANILLA_ICE_CREAM = _AndroidVersion("15", "VanillaIceCream", 35)
