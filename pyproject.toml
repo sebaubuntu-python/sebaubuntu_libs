@@ -11,7 +11,7 @@ repository = "https://github.com/sebaubuntu-python/sebaubuntu_libs"
 python = "^3.8"
 GitPython = "^3.1.27"
 requests = "^2.28.1"
-pyelftools = ">=0.29,<0.32"
+pyelftools = ">=0.29,<0.33"
 sphinx = { version = ">=5.0.1,<8.0.0", optional = true }
 sphinx-rtd-theme = { version = ">=1,<4", optional = true }
 
