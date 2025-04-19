@@ -5,6 +5,7 @@
 #
 """AIK wrapper library."""
 
+import os
 from git import Repo
 from pathlib import Path
 from platform import system
