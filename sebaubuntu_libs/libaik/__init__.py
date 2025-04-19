@@ -100,14 +100,20 @@ class AIKManager:
 		if which("cpio") is None:
 			raise RuntimeError("cpio package is not installed")
 
-		self.tempdir = TemporaryDirectory()
-		self.path = Path(self.tempdir.name)
+  aik_env_path = os.environ.get("AIK_PATH")  #  [2][3][4]
+
+  if aik_env_path and Path(aik_env_path).is_dir():
+          self.path = Path(aik_env_path)
+          self.tempdir = None
+          LOGI(f"Using AIK from AIK_PATH: {self.path}")
+  else:
+		        self.tempdir = TemporaryDirectory()
+		        self.path = Path(self.tempdir.name)
+          LOGI("Cloning AIK...")
+		        Repo.clone_from(AIK_REPO, self.path)
 
 		self.images_path = self.path / "split_img"
 		self.ramdisk_path = self.path / "ramdisk"
-
-		LOGI("Cloning AIK...")
-		Repo.clone_from(AIK_REPO, self.path)
 
 	def unpackimg(self, image: Path, ignore_ramdisk_errors: bool = False):
 		"""Extract recovery image."""
