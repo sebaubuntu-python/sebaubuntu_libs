@@ -44,7 +44,7 @@ GMS_CLIENTID_BASE = ["ro.com.google.clientidbase.ms", "ro.com.google.clientidbas
 BUILD_SECURITY_PATCH = ["ro.build.version.security_patch"]
 BUILD_VENDOR_SECURITY_PATCH = ["ro.vendor.build.security_patch"]
 
-FIRST_API_LEVEL = ["ro.product.first_api_level"]
+FIRST_API_LEVEL = ["ro.product.first_api_level", "ro.build.version.sdk"]
 PRODUCT_CHARACTERISTICS = ["ro.build.characteristics"]
 APEX_UPDATABLE = ["ro.apex.updatable"]
 
