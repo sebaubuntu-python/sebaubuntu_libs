@@ -39,7 +39,7 @@ class FstabEntry:
 
 	@classmethod
 	def from_entry(cls, line: str):
-		src, mount_point, fs_type, mnt_flags, fs_flags = line.split()
+		src, mount_point, fs_type, mnt_flags, fs_flags, *_ = line.split()+ ['']+ ['']
 
 		return cls(src, mount_point, fs_type, mnt_flags.split(','), fs_flags.split(','))
 
