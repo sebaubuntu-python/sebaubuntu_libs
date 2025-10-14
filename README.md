@@ -9,7 +9,7 @@ A collection of code shared between my projects
 ## Installation
 
 ```sh
-pip3 install sebaubuntu_libs
+pip install sebaubuntu_libs
 ```
 
 ## Documentation
