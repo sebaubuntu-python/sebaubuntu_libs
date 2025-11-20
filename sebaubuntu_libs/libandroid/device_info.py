@@ -39,7 +39,7 @@ USE_VULKAN = ["ro.hwui.use_vulkan"]
 BUILD_FINGERPRINT = get_partition_props("ro.{}build.fingerprint", add_empty=True)
 BUILD_DESCRIPTION = get_partition_props("ro.{}build.description", add_empty=True)
 
-GMS_CLIENTID_BASE = ["ro.com.google.clientidbase.ms", "ro.com.google.clientidbase"]
+GMS_CLIENTID_BASE = ["ro.com.google.clientidbase"]
 
 BUILD_SECURITY_PATCH = ["ro.build.version.security_patch"]
 BUILD_VENDOR_SECURITY_PATCH = ["ro.vendor.build.security_patch"]
