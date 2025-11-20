@@ -51,6 +51,8 @@ APEX_UPDATABLE = ["ro.apex.updatable"]
 BOARD_FIRST_API_LEVEL = ["ro.board.first_api_level"]
 BOARD_API_LEVEL = ["ro.board.api_level"]
 
+ENABLE_UFFD_GC = ["ro.dalvik.vm.enable_uffd_gc"]
+
 class DeviceArch(Enum):
 	def __new__(cls, *args, **kwargs):
 		value = len(cls.__members__) + 1
@@ -171,6 +173,8 @@ class DeviceInfo:
 
 		self.board_first_api_level = self.get_first_prop(BOARD_FIRST_API_LEVEL, raise_exception=False)
 		self.board_api_level = self.get_first_prop(BOARD_API_LEVEL, raise_exception=False)
+
+		self.enable_uffd_gc = self.get_first_prop(ENABLE_UFFD_GC, data_type=bool_cast, raise_exception=False)
 
 	def get_first_prop(self, props: List[str], data_type: Callable[[str], Any] = str,
 	                   default: Any = None, raise_exception: bool = True):
