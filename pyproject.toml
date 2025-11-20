@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "sebaubuntu_libs"
-version = "1.6.0"
+version = "1.6.1"
 description = "SebaUbuntu's shared libs"
 authors = ["Sebastiano Barezzi <seba@sebaubuntu.dev>"]
 license = "Apache-2.0"
