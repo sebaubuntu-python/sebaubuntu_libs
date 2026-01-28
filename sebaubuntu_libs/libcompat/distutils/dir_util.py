@@ -95,6 +95,7 @@ def copy_tree(  # noqa: C901
 	update=0,
 	verbose=1,
 	dry_run=0,
+	skip_non_regular_files=0,
 ):
 	"""Copy an entire directory tree 'src' to a new location 'dst'.
 
@@ -161,6 +162,12 @@ def copy_tree(  # noqa: C901
 					dry_run=dry_run,
 				)
 			)
+
+		elif skip_non_regular_files and not os.path.isfile(src_name):
+			if verbose >= 1:
+				LOGI("skipping non-regular file %s", src_name)
+			continue
+
 		else:
 			copy_file(
 				src_name,
