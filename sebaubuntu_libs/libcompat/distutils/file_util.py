@@ -103,12 +103,19 @@ def copy_file(  # noqa: C901
 	# (not update) and (src newer than dst).
 
 	from ._modified import newer
-	from stat import S_IMODE, ST_ATIME, ST_MODE, ST_MTIME
+	from stat import S_IMODE, S_ISCHR, ST_ATIME, ST_MODE, ST_MTIME
+
+	st = os.stat(src)
 
 	if not os.path.isfile(src):
-		raise DistutilsFileError(
-			"can't copy '%s': doesn't exist or not a regular file" % src
-		)
+		if S_ISCHR(st[ST_MODE]):
+			if verbose >= 1:
+				LOGD("not copying %s (file is character device)", src)
+			return (dst, 0)
+		else:
+			raise DistutilsFileError(
+				"can't copy '%s': doesn't exist or not a regular file" % src
+			)
 
 	if os.path.isdir(dst):
 		dir = dst
@@ -156,8 +163,6 @@ def copy_file(  # noqa: C901
 	# (optionally) copy the times and mode.
 	_copy_file_contents(src, dst)
 	if preserve_mode or preserve_times:
-		st = os.stat(src)
-
 		# According to David Ascher <da@ski.org>, utime() should be done
 		# before chmod() (at least under NT).
 		if preserve_times:
