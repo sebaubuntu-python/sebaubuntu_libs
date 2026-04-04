@@ -5,14 +5,16 @@
 #
 """Strings utils."""
 
+
 def removeprefix(string: str, prefix: str) -> str:
-	"""Remove a prefix from a string."""
-	if string.startswith(prefix):
-		return string[len(prefix):]
-	return string
+    """Remove a prefix from a string."""
+    if string.startswith(prefix):
+        return string[len(prefix) :]
+    return string
+
 
 def removesuffix(string: str, suffix: str) -> str:
-	"""Remove a suffix from a string."""
-	if string.endswith(suffix):
-		return string[:-len(suffix)]
-	return string
+    """Remove a suffix from a string."""
+    if string.endswith(suffix):
+        return string[: -len(suffix)]
+    return string

@@ -10,66 +10,80 @@ from typing import Dict
 from sebaubuntu_libs.libandroid.partitions.partition import AndroidPartition, BUILD_PROP_LOCATION
 from sebaubuntu_libs.libandroid.partitions.partition_model import SSI, TREBLE, PartitionModel
 
+
 class Partitions:
-	def __init__(self, dump_path: Path):
-		self.dump_path = dump_path
+    def __init__(self, dump_path: Path):
+        self.dump_path = dump_path
 
-		self.partitions: Dict[PartitionModel, AndroidPartition] = {}
+        self.partitions: Dict[PartitionModel, AndroidPartition] = {}
 
-		# Search for system
-		for system in [self.dump_path / "system", self.dump_path / "system/system"]:
-			for build_prop_location in BUILD_PROP_LOCATION:
-				if not (system / build_prop_location).is_file():
-					continue
+        # Search for system
+        for system in [self.dump_path / "system", self.dump_path / "system/system"]:
+            for build_prop_location in BUILD_PROP_LOCATION:
+                if not (system / build_prop_location).is_file():
+                    continue
 
-				self.partitions[PartitionModel.SYSTEM] = AndroidPartition(PartitionModel.SYSTEM, system)
+                self.partitions[PartitionModel.SYSTEM] = AndroidPartition(
+                    PartitionModel.SYSTEM, system
+                )
 
-		assert PartitionModel.SYSTEM in self.partitions
-		self.system = self.partitions[PartitionModel.SYSTEM]
+        assert PartitionModel.SYSTEM in self.partitions
+        self.system = self.partitions[PartitionModel.SYSTEM]
 
-		# Search for vendor
-		for vendor in [self.partitions[PartitionModel.SYSTEM].path / "vendor", self.dump_path / "vendor"]:
-			for build_prop_location in BUILD_PROP_LOCATION:
-				if not (vendor / build_prop_location).is_file():
-					continue
+        # Search for vendor
+        for vendor in [
+            self.partitions[PartitionModel.SYSTEM].path / "vendor",
+            self.dump_path / "vendor",
+        ]:
+            for build_prop_location in BUILD_PROP_LOCATION:
+                if not (vendor / build_prop_location).is_file():
+                    continue
 
-				self.partitions[PartitionModel.VENDOR] = AndroidPartition(PartitionModel.VENDOR, vendor)
+                self.partitions[PartitionModel.VENDOR] = AndroidPartition(
+                    PartitionModel.VENDOR, vendor
+                )
 
-		assert PartitionModel.VENDOR in self.partitions
-		self.vendor = self.partitions[PartitionModel.VENDOR]
+        assert PartitionModel.VENDOR in self.partitions
+        self.vendor = self.partitions[PartitionModel.VENDOR]
 
-		# Search for the other partitions
-		for model in [model for model in PartitionModel.from_group(SSI) if model is not PartitionModel.SYSTEM]:
-			self._search_for_partition(model)
+        # Search for the other partitions
+        for model in [
+            model for model in PartitionModel.from_group(SSI) if model is not PartitionModel.SYSTEM
+        ]:
+            self._search_for_partition(model)
 
-		for model in [model for model in PartitionModel.from_group(TREBLE) if model is not PartitionModel.VENDOR]:
-			self._search_for_partition(model)
+        for model in [
+            model
+            for model in PartitionModel.from_group(TREBLE)
+            if model is not PartitionModel.VENDOR
+        ]:
+            self._search_for_partition(model)
 
-	def get_partition(self, model: PartitionModel):
-		if not model:
-			return None
+    def get_partition(self, model: PartitionModel):
+        if not model:
+            return None
 
-		if model in self.partitions:
-			return self.partitions[model]
+        if model in self.partitions:
+            return self.partitions[model]
 
-		return None
+        return None
 
-	def get_partition_by_name(self, name: str):
-		return self.get_partition(PartitionModel.from_name(name))
+    def get_partition_by_name(self, name: str):
+        return self.get_partition(PartitionModel.from_name(name))
 
-	def get_all_partitions(self):
-		return self.partitions.values()
+    def get_all_partitions(self):
+        return self.partitions.values()
 
-	def _search_for_partition(self, model: PartitionModel):
-		possible_locations = [
-			self.partitions[PartitionModel.SYSTEM].path / model.name,
-			self.partitions[PartitionModel.VENDOR].path / model.name,
-			self.dump_path / model.name
-		]
+    def _search_for_partition(self, model: PartitionModel):
+        possible_locations = [
+            self.partitions[PartitionModel.SYSTEM].path / model.name,
+            self.partitions[PartitionModel.VENDOR].path / model.name,
+            self.dump_path / model.name,
+        ]
 
-		for location in possible_locations:
-			for build_prop_location in BUILD_PROP_LOCATION:
-				if not (location / build_prop_location).is_file():
-					continue
+        for location in possible_locations:
+            for build_prop_location in BUILD_PROP_LOCATION:
+                if not (location / build_prop_location).is_file():
+                    continue
 
-				self.partitions[model] = AndroidPartition(model, location)
+                self.partitions[model] = AndroidPartition(model, location)

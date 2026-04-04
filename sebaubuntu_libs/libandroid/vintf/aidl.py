@@ -11,63 +11,67 @@ from xml.etree.ElementTree import Element
 from sebaubuntu_libs.libandroid.vintf import INDENTATION
 from sebaubuntu_libs.libandroid.vintf.common import Hal, cast_to_str_key
 
+
 class AidlInterface:
-	"""Class representing a AIDL HAL."""
-	def __init__(self, name: str, instance: str):
-		"""Initialize an object."""
-		self.name = name
-		self.instance = instance
+    """Class representing a AIDL HAL."""
 
-	def __str__(self) -> str:
-		return f"{self.name}/{self.instance}"
+    def __init__(self, name: str, instance: str):
+        """Initialize an object."""
+        self.name = name
+        self.instance = instance
 
-	def __eq__(self, __o: object) -> bool:
-		if isinstance(__o, AidlInterface):
-			return (self.name == __o.name
-			        and self.instance == __o.instance)
-		return False
+    def __str__(self) -> str:
+        return f"{self.name}/{self.instance}"
 
-	def __hash__(self) -> int:
-		return hash((self.name, self.instance))
+    def __eq__(self, __o: object) -> bool:
+        if isinstance(__o, AidlInterface):
+            return self.name == __o.name and self.instance == __o.instance
+        return False
 
-	@classmethod
-	def from_fqname(cls, string: str) -> 'AidlInterface':
-		"""
-		Create a AIDL HAL from a FQName.
+    def __hash__(self) -> int:
+        return hash((self.name, self.instance))
 
-		Example:
-		ILights/default
-		"""
-		name, instance = string.split("/", 1)
+    @classmethod
+    def from_fqname(cls, string: str) -> "AidlInterface":
+        """
+        Create a AIDL HAL from a FQName.
 
-		return cls(name, instance)
+        Example:
+        ILights/default
+        """
+        name, instance = string.split("/", 1)
+
+        return cls(name, instance)
+
 
 class AidlHal(Hal):
-	"""Class representing a AIDL HAL."""
-	def __init__(self, name: str, interfaces: Set[AidlInterface]):
-		"""Initialize an object."""
-		super().__init__(name)
+    """Class representing a AIDL HAL."""
 
-		self.interfaces = interfaces
+    def __init__(self, name: str, interfaces: Set[AidlInterface]):
+        """Initialize an object."""
+        super().__init__(name)
 
-	def __str__(self) -> str:
-		string = '<hal format="aidl">\n'
-		string += indent(f'<name>{self.name}</name>\n', INDENTATION)
-		for interface in sorted(self.interfaces, key=cast_to_str_key):
-			string += indent(f'<fqname>{interface}</fqname>\n', INDENTATION)
-		string += '</hal>'
+        self.interfaces = interfaces
 
-		return string
+    def __str__(self) -> str:
+        string = '<hal format="aidl">\n'
+        string += indent(f"<name>{self.name}</name>\n", INDENTATION)
+        for interface in sorted(self.interfaces, key=cast_to_str_key):
+            string += indent(f"<fqname>{interface}</fqname>\n", INDENTATION)
+        string += "</hal>"
 
-	@classmethod
-	def from_entry(cls, entry: Element) -> 'AidlHal':
-		"""Create a AIDL HAL from a VINTF entry."""
-		assert entry.get("format") == "aidl"
+        return string
 
-		name = entry.findtext("name")
-		assert name is not None, "Missing name in AIDL HAL"
+    @classmethod
+    def from_entry(cls, entry: Element) -> "AidlHal":
+        """Create a AIDL HAL from a VINTF entry."""
+        assert entry.get("format") == "aidl"
 
-		interfaces = set([AidlInterface.from_fqname(interface.text)
-		                  for interface in entry.findall("fqname")])
+        name = entry.findtext("name")
+        assert name is not None, "Missing name in AIDL HAL"
 
-		return cls(name, interfaces)
+        interfaces = set(
+            [AidlInterface.from_fqname(interface.text) for interface in entry.findall("fqname")]
+        )
+
+        return cls(name, interfaces)

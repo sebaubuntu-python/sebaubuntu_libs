@@ -7,5 +7,6 @@
 
 from locale import LC_ALL, setlocale
 
+
 def setup_locale():
-	setlocale(LC_ALL, "C")
+    setlocale(LC_ALL, "C")

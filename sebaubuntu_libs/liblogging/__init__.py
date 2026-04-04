@@ -14,9 +14,11 @@ LOGW = warning
 LOGE = error
 LOGF = fatal
 
+
 def setup_logging(verbose: bool = False):
-	if verbose:
-		basicConfig(format='[%(filename)s:%(lineno)s %(levelname)s] %(funcName)s: %(message)s',
-		            level=DEBUG)
-	else:
-		basicConfig(format='[%(levelname)s] %(message)s', level=INFO)
+    if verbose:
+        basicConfig(
+            format="[%(filename)s:%(lineno)s %(levelname)s] %(funcName)s: %(message)s", level=DEBUG
+        )
+    else:
+        basicConfig(format="[%(levelname)s] %(message)s", level=INFO)
