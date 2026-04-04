@@ -1,12 +1,7 @@
 #
-# Copyright (C) 2022 Sebastiano Barezzi
+# Copyright (C) 2022-2026 Sebastiano Barezzi
 #
 # SPDX-License-Identifier: Apache-2.0
 #
 
-from pathlib import Path
-
 __version__ = "1.6.1"
-
-module_path = Path(__file__).parent
-current_path = Path.cwd()
