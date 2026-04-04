@@ -1,7 +1,6 @@
 #
-# Copyright (C) 2023 Python Packaging Authority
-# Copyright (C) 2024 Sebastiano Barezzi
-#
+# SPDX-FileCopyrightText: 2023 Python Packaging Authority
+# SPDX-FileCopyrightText: Sebastiano Barezzi
 # SPDX-License-Identifier: MIT
 #
 

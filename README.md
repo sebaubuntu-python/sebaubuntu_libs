@@ -20,8 +20,7 @@ Complete documentation at [Read the Docs](https://sebaubuntu-libs.readthedocs.io
 
 ```
 #
-# Copyright (C) 2022 Sebastiano Barezzi
-#
+# SPDX-FileCopyrightText: Sebastiano Barezzi
 # SPDX-License-Identifier: Apache-2.0
 #
 ```
