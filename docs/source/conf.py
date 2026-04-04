@@ -1,5 +1,6 @@
 import os
 import sys
+import types
 sys.path.insert(0, os.path.abspath('./../..'))
 
 # -- Project information -----------------------------------------------------
@@ -42,8 +43,6 @@ intersphinx_disabled_domains = ['std']
 html_theme = 'sphinx_rtd_theme'
 
 # -- Setup function ----------------------------------------------------------
-
-import types
 
 def setup(app):
     app.connect('autodoc-skip-member', special_methods_callback)

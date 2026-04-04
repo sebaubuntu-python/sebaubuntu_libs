@@ -41,7 +41,7 @@ class GoFileRequests:
 	@staticmethod
 	def _process_response(response: Response):
 		response_json = response.json()
-		if not "status" in response_json:
+		if "status" not in response_json:
 			raise Exception(f"Invalid response: {response_json}")
 
 		if response_json["status"] != "ok":

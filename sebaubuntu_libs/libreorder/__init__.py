@@ -22,7 +22,7 @@ def strcoll_files(string1: Union[str, Path], string2: Union[str, Path]) -> int:
 		return strcoll(string1, string2)
 
 	# If no directories, compare normally
-	if not "/" in string1 and not "/" in string2:
+	if "/" not in string1 and "/" not in string2:
 		return strcoll(string1, string2)
 
 	string1_dir = string1.rsplit("/", 1)[0] + "/"

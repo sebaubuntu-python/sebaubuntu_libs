@@ -39,10 +39,10 @@ class Partitions:
 		self.vendor = self.partitions[PartitionModel.VENDOR]
 
 		# Search for the other partitions
-		for model in [model for model in PartitionModel.from_group(SSI) if not (model is PartitionModel.SYSTEM)]:
+		for model in [model for model in PartitionModel.from_group(SSI) if model is not PartitionModel.SYSTEM]:
 			self._search_for_partition(model)
 
-		for model in [model for model in PartitionModel.from_group(TREBLE) if not (model is PartitionModel.VENDOR)]:
+		for model in [model for model in PartitionModel.from_group(TREBLE) if model is not PartitionModel.VENDOR]:
 			self._search_for_partition(model)
 
 	def get_partition(self, model: PartitionModel):

@@ -79,7 +79,7 @@ class AndroidVersion(_AndroidVersion):
 	M = _AndroidVersion("6.0", "Marshmallow", 23)
 	N = _AndroidVersion("7.0", "Nougat", 24)
 	N_MR1 = _AndroidVersion("7.1", "Nougat MR1", 25)
-	O = _AndroidVersion("8.0", "Oreo", 26)
+	O = _AndroidVersion("8.0", "Oreo", 26)  # noqa: E741
 	O_MR1 = _AndroidVersion("8.1", "Oreo MR1", 27)
 	P = _AndroidVersion("9", "Pie", 28)
 	Q = _AndroidVersion("10", "Q", 29)

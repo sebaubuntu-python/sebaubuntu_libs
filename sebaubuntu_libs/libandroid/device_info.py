@@ -105,7 +105,8 @@ class DeviceArch(Enum):
 	X86 = ("x86", "generic", 32, ["x86"])
 	X86_64 = ("x86_64", "generic", 64, ["x86_64"])
 
-bool_cast = lambda x: bool(strtobool(x))
+def bool_cast(x: str) -> bool:
+	return bool(strtobool(x))
 
 class DeviceInfo:
 	"""

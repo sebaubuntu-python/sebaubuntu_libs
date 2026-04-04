@@ -113,7 +113,7 @@ class HidlHal(Hal):
 		return hash((self.name, self.transport, self.interfaces))
 
 	def __str__(self) -> str:
-		string = f'<hal format="hidl">\n'
+		string = '<hal format="hidl">\n'
 		string += indent(f'<name>{self.name}</name>\n', INDENTATION)
 		string += indent(f'{self.transport}\n', INDENTATION)
 		for interface in sorted(self.interfaces, key=cast_to_str_key):

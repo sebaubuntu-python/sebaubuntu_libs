@@ -51,7 +51,7 @@ class AidlHal(Hal):
 		self.interfaces = interfaces
 
 	def __str__(self) -> str:
-		string = f'<hal format="aidl">\n'
+		string = '<hal format="aidl">\n'
 		string += indent(f'<name>{self.name}</name>\n', INDENTATION)
 		for interface in sorted(self.interfaces, key=cast_to_str_key):
 			string += indent(f'<fqname>{interface}</fqname>\n', INDENTATION)
