@@ -1,0 +1,15 @@
+#
+# SPDX-FileCopyrightText: Sebastiano Barezzi
+# SPDX-License-Identifier: Apache-2.0
+#
+
+version = 1
+SPDX-PackageName = "sebaubuntu_libs"
+SPDX-PackageSupplier = "Sebastiano Barezzi"
+SPDX-PackageDownloadLocation = "https://github.com/sebaubuntu-python/sebaubuntu_libs"
+
+[[annotations]]
+path = ["docs/**/*", "poetry.lock"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Sebastiano Barezzi"
+SPDX-License-Identifier = "Apache-2.0"
