@@ -16,7 +16,7 @@ pip install sebaubuntu_libs
 
 Complete documentation at [Read the Docs](https://sebaubuntu-libs.readthedocs.io)
 
-# License
+## License
 
 ```
 #
