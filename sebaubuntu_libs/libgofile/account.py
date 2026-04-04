@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-from typing import Dict
+from typing import Any, Dict
 
 
 class Account:
@@ -33,7 +33,7 @@ class Account:
         self.total_30ddl_traffic_limit = total_30ddl_traffic_limit
 
     @staticmethod
-    def from_dict(data: Dict):
+    def from_dict(data: Dict[str, Any]):
         return Account(
             token=data["token"],
             email=data["email"],

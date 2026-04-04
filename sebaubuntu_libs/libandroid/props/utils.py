@@ -4,12 +4,12 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-from sebaubuntu_libs.libandroid.partitions.partition_model import PartitionModel, PartitionGroup
+from sebaubuntu_libs.libandroid.partitions.partition_model import PartitionModels, PartitionGroup
 
 PARTITIONS = [
     partition.name
-    for partition in PartitionModel.from_group(PartitionGroup.SSI)
-    + PartitionModel.from_group(PartitionGroup.TREBLE)
+    for partition in PartitionModels.from_group(PartitionGroup.SSI)
+    + PartitionModels.from_group(PartitionGroup.TREBLE)
 ] + [
     "bootimage",
 ]

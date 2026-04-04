@@ -9,7 +9,7 @@ from itertools import repeat
 from pathlib import Path
 from typing import List, Set
 
-from sebaubuntu_libs.libandroid.partitions.partition_model import PartitionModel
+from sebaubuntu_libs.libandroid.partitions.partition_model import PartitionModel, PartitionModels
 
 FSTAB_HEADER = "#<src>                                                 <mnt_point>            <type>  <mnt_flags and options>                            <fs_mgr_flags>\n"
 
@@ -65,7 +65,7 @@ class Fstab:
         return self.format()
 
     def format(self, twrp: bool = False):
-        entries = []
+        entries: List[str] = []
 
         src_len_max = 0
         mount_point_len_max = 0
@@ -138,11 +138,11 @@ class Fstab:
         return [entry for entry in self.entries if entry.is_logical()]
 
     def get_logical_partitions_models(self) -> Set[PartitionModel]:
-        models = set()
+        models: Set[PartitionModel] = set()
 
         for entry in self.entries:
             if entry.is_logical():
-                partition_model = PartitionModel.from_mount_point(entry.mount_point)
+                partition_model = PartitionModels.from_mount_point(entry.mount_point)
                 if partition_model is None:
                     continue
                 models.add(partition_model)
@@ -153,10 +153,10 @@ class Fstab:
         return [entry for entry in self.entries if entry.is_slotselect()]
 
     def get_ab_partitions_models(self) -> Set[PartitionModel]:
-        models = set()
+        models: Set[PartitionModel] = set()
 
         for entry in self.get_slotselect_partitions():
-            partition_model = PartitionModel.from_mount_point(entry.mount_point)
+            partition_model = PartitionModels.from_mount_point(entry.mount_point)
             if partition_model is None:
                 continue
             models.add(partition_model)

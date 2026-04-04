@@ -55,6 +55,7 @@ class HidlInterface:
         return [
             HidlInterface(name, version, instance.text)
             for instance in interface.findall("instance")
+            if instance.text is not None
         ]
 
     @classmethod
@@ -134,15 +135,21 @@ class HidlHal(Hal):
     @classmethod
     def from_entry(cls, entry: Element) -> "HidlHal":
         """Create a HIDL HAL from a VINTF entry."""
-        assert entry.get("format") == "hidl"
+        assert entry.get("format") == "hidl", "Invalid format for HIDL HAL"
 
         name = entry.findtext("name")
-        transport = HidlTransport.from_element(entry.find("transport"))
+        assert name is not None, "Missing name in HIDL HAL"
+
+        trasport_element = entry.find("transport")
+        assert trasport_element is not None, "Missing transport in HIDL HAL"
+        transport = HidlTransport.from_element(trasport_element)
 
         version = entry.findtext("version")
 
         interfaces = [
-            HidlInterface.from_fqname(interface.text) for interface in entry.findall("fqname")
+            HidlInterface.from_fqname(interface.text)
+            for interface in entry.findall("fqname")
+            if interface.text is not None
         ]
         interface_elements = entry.findall("interface")
         if len(interface_elements) > 0:

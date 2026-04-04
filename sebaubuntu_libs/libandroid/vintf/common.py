@@ -11,7 +11,7 @@ from locale import strcoll
 class Hal:
     """Class representing a HAL."""
 
-    def __init__(self, name) -> None:
+    def __init__(self, name: str) -> None:
         """Initialize an object."""
         self.name = name
 

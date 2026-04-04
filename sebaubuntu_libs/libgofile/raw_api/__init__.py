@@ -8,6 +8,7 @@ from datetime import datetime
 from io import BytesIO
 from sebaubuntu_libs.libgofile import DOMAIN
 from sebaubuntu_libs.libgofile.raw_api.rest import GoFileRequests
+from typing import Optional
 
 __all__ = [
     "get_server",
@@ -23,7 +24,7 @@ __all__ = [
 API_URL = f"https://api.{DOMAIN}"
 
 
-def get_server() -> str:
+def get_server():
     """Returns the best server available to receive files."""
     return GoFileRequests.get(f"{API_URL}/getServer")
 
@@ -31,12 +32,12 @@ def get_server() -> str:
 def upload_file(
     server: str,
     file: BytesIO,
-    token: str = None,
-    folder_id: str = None,
-    description: str = None,
-    password: str = None,
-    tags: str = None,
-    expire: datetime = None,
+    token: Optional[str] = None,
+    folder_id: Optional[str] = None,
+    description: Optional[str] = None,
+    password: Optional[str] = None,
+    tags: Optional[str] = None,
+    expire: Optional[datetime] = None,
 ):
     """Upload one file on a specific server."""
     params = {}

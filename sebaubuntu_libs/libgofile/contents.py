@@ -5,7 +5,7 @@
 #
 
 from datetime import datetime
-from typing import Dict, List
+from typing import Any, Dict, List, Optional
 
 
 class Content:
@@ -24,7 +24,7 @@ class Content:
         self.parent_folder = parent_folder
         self.create_time = create_time
 
-    def get_kwargs(self):
+    def get_kwargs(self) -> Dict[str, Any]:
         return {
             "content_id": self.content_id,
             "content_type": self.content_type,
@@ -34,7 +34,7 @@ class Content:
         }
 
     @staticmethod
-    def from_dict(data: Dict):
+    def from_dict(data: Dict[str, Any]):
         create_time = datetime.fromtimestamp(data["createTime"])
 
         return Content(
@@ -58,8 +58,8 @@ class File(Content):
         server_choosen: str,
         direct_link: str,
         link: str,
-        *args,
-        **kwargs,
+        *args: Any,
+        **kwargs: Dict[str, Any],
     ):
         """Initialize a GoFile file."""
         super().__init__(*args, **kwargs)
@@ -86,7 +86,7 @@ class File(Content):
         return kwargs
 
     @staticmethod
-    def from_dict(data: Dict):
+    def from_dict(data: Dict[str, Any]):
         content = Content.from_dict(data)
 
         return File(
@@ -109,8 +109,8 @@ class Folder(Content):
         childs: List[str],
         code: str,
         public: bool,
-        *args,
-        **kwargs,
+        *args: Any,
+        **kwargs: Dict[str, Any],
     ):
         """Initialize a GoFile folder."""
         super().__init__(*args, **kwargs)
@@ -119,7 +119,7 @@ class Folder(Content):
         self.code = code
         self.public = public
 
-    def get_kwargs(self):
+    def get_kwargs(self) -> Dict[str, Any]:
         kwargs = super().get_kwargs()
 
         kwargs["childs"] = self.childs
@@ -129,13 +129,16 @@ class Folder(Content):
         return kwargs
 
     @staticmethod
-    def from_dict(data: Dict):
+    def from_dict(data: Dict[str, Any]) -> "Folder":
         content = Content.from_dict(data)
 
-        public = data.get("public")
+        public = data.get("public", False)
 
         return Folder(
-            childs=data["childs"], code=data["code"], public=public, **content.get_kwargs()
+            childs=data["childs"],
+            code=data["code"],
+            public=public,
+            **content.get_kwargs(),
         )
 
 
@@ -148,15 +151,15 @@ class ContentResponse(Folder):
         self,
         total_download_count: int,
         total_size: int,
-        contents: Dict[str, Dict],
+        contents: Dict[str, Dict[str, Any]],
         # We may not know the owner ID if the owner isn't the one who called get_content
-        owner_id: str = None,
+        owner_id: Optional[str] = None,
         # Only for non-root folders
-        parent_folder: str = None,
+        parent_folder: Optional[str] = None,
         # Only for root folders
         is_root: bool = False,
-        *args,
-        **kwargs,
+        *args: Any,
+        **kwargs: Dict[str, Any],
     ):
         """Initialize a GoFile content."""
         super().__init__(*args, **kwargs)
@@ -169,7 +172,7 @@ class ContentResponse(Folder):
         self.is_root = is_root
 
     @staticmethod
-    def from_dict(data: Dict):
+    def from_dict(data: Dict[str, Any]) -> "ContentResponse":
         folder = Folder.from_dict(data)
 
         owner_id = data.get("ownerId")

@@ -71,7 +71,11 @@ class AidlHal(Hal):
         assert name is not None, "Missing name in AIDL HAL"
 
         interfaces = set(
-            [AidlInterface.from_fqname(interface.text) for interface in entry.findall("fqname")]
+            [
+                AidlInterface.from_fqname(interface.text)
+                for interface in entry.findall("fqname")
+                if interface.text is not None
+            ]
         )
 
         return cls(name, interfaces)

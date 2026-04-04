@@ -6,31 +6,36 @@
 
 import requests
 from requests.models import Response
+from typing import Any, Callable, Dict
 
 
 class GoFileRequests:
     @classmethod
-    def delete(cls, *args, **kwargs):
+    def delete(cls, *args: Any, **kwargs: Dict[str, Any]):
         response = cls._send_request(requests.delete, *args, **kwargs)
         return cls._process_response(response)
 
     @classmethod
-    def get(cls, *args, **kwargs):
+    def get(cls, *args: Any, **kwargs: Dict[str, Any]):
         response = cls._send_request(requests.get, *args, **kwargs)
         return cls._process_response(response)
 
     @classmethod
-    def post(cls, *args, **kwargs):
+    def post(cls, *args: Any, **kwargs: Dict[str, Any]):
         response = cls._send_request(requests.post, *args, **kwargs)
         return cls._process_response(response)
 
     @classmethod
-    def put(cls, *args, **kwargs):
+    def put(cls, *args: Any, **kwargs: Dict[str, Any]):
         response = cls._send_request(requests.put, *args, **kwargs)
         return cls._process_response(response)
 
     @staticmethod
-    def _send_request(func, *args, **kwargs):
+    def _send_request(
+        func: Callable[..., Response],
+        *args: Any,
+        **kwargs: Dict[str, Any],
+    ) -> Response:
         for arg in ["data", "params"]:
             kwargs[arg] = kwargs.get(arg, {})
             # We do a little trolling
