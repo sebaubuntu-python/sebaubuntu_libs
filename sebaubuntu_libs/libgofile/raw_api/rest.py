@@ -5,27 +5,27 @@
 
 import requests
 from requests.models import Response
-from typing import Any, Callable, Dict
+from typing import Any, Callable
 
 
 class GoFileRequests:
     @classmethod
-    def delete(cls, *args: Any, **kwargs: Dict[str, Any]):
+    def delete(cls, *args: Any, **kwargs: Any):
         response = cls._send_request(requests.delete, *args, **kwargs)
         return cls._process_response(response)
 
     @classmethod
-    def get(cls, *args: Any, **kwargs: Dict[str, Any]):
+    def get(cls, *args: Any, **kwargs: Any):
         response = cls._send_request(requests.get, *args, **kwargs)
         return cls._process_response(response)
 
     @classmethod
-    def post(cls, *args: Any, **kwargs: Dict[str, Any]):
+    def post(cls, *args: Any, **kwargs: Any):
         response = cls._send_request(requests.post, *args, **kwargs)
         return cls._process_response(response)
 
     @classmethod
-    def put(cls, *args: Any, **kwargs: Dict[str, Any]):
+    def put(cls, *args: Any, **kwargs: Any):
         response = cls._send_request(requests.put, *args, **kwargs)
         return cls._process_response(response)
 
@@ -33,7 +33,7 @@ class GoFileRequests:
     def _send_request(
         func: Callable[..., Response],
         *args: Any,
-        **kwargs: Dict[str, Any],
+        **kwargs: Any,
     ) -> Response:
         for arg in ["data", "params"]:
             kwargs[arg] = kwargs.get(arg, {})

@@ -58,7 +58,7 @@ class File(Content):
         direct_link: str,
         link: str,
         *args: Any,
-        **kwargs: Dict[str, Any],
+        **kwargs: Any,
     ):
         """Initialize a GoFile file."""
         super().__init__(*args, **kwargs)
@@ -109,7 +109,7 @@ class Folder(Content):
         code: str,
         public: bool,
         *args: Any,
-        **kwargs: Dict[str, Any],
+        **kwargs: Any,
     ):
         """Initialize a GoFile folder."""
         super().__init__(*args, **kwargs)
@@ -158,7 +158,7 @@ class ContentResponse(Folder):
         # Only for root folders
         is_root: bool = False,
         *args: Any,
-        **kwargs: Dict[str, Any],
+        **kwargs: Any,
     ):
         """Initialize a GoFile content."""
         super().__init__(*args, **kwargs)
