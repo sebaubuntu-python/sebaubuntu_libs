@@ -6,9 +6,13 @@
 
 from __future__ import annotations
 from pathlib import Path
-from typing import Any, Callable, List, Optional, Union
+from typing import Callable, List, Optional, TypeVar, Union
 
 from sebaubuntu_libs.libcompat.distutils.util import strtobool
+
+
+T = TypeVar("T")
+D = TypeVar("D")
 
 
 class BuildProp(dict):
@@ -51,7 +55,12 @@ class BuildProp(dict):
             else:
                 self.set_prop(prop_name, prop_value)
 
-    def _get_prop(self, key: str, data_type: Callable[[str], Any] = str, default: Any = None):
+    def _get_prop(
+        self,
+        key: str,
+        data_type: Callable[[str], T] = str,
+        default: D = None,
+    ) -> Union[T, D]:
         if key in self:
             try:
                 return data_type(self[key])

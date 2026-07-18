@@ -4,11 +4,15 @@
 #
 
 from enum import Enum
-from typing import Any, Callable, List
+from typing import Callable, List, TypeVar, Union
 
 from sebaubuntu_libs.libandroid.props import BuildProp
 from sebaubuntu_libs.libandroid.props.utils import fingerprint_to_description, get_partition_props
 from sebaubuntu_libs.libcompat.distutils.util import strtobool
+
+
+T = TypeVar("T")
+D = TypeVar("D")
 
 
 def get_product_props(value: str):
@@ -126,7 +130,8 @@ class DeviceInfo:
 
         # Parse props
         self.codename = self.get_first_prop(DEVICE_CODENAME)
-        self.manufacturer = self.get_first_prop(DEVICE_MANUFACTURER).split()[0].lower()
+        manufacturer = self.get_first_prop(DEVICE_MANUFACTURER)
+        self.manufacturer = manufacturer.split()[0].lower() if manufacturer else None
         self.brand = self.get_first_prop(DEVICE_BRAND, raise_exception=False)
         self.model = self.get_first_prop(DEVICE_MODEL, raise_exception=False)
         self.build_fingerprint = self.get_first_prop(BUILD_FINGERPRINT, raise_exception=False)
@@ -149,9 +154,9 @@ class DeviceInfo:
                 self.second_arch = DeviceArch.from_arch(second_arch_prop)
         else:
             # Fallback to ABI list
-            abi_list = self.get_first_prop(DEVICE_CPU_ABILIST).split(",")
+            abi_list = self.get_first_prop(DEVICE_CPU_ABILIST)
             assert abi_list, "No ABI list prop found"
-            archs = list(set([DeviceArch.from_abi(abi) for abi in abi_list]))
+            archs = list(set([DeviceArch.from_abi(abi) for abi in abi_list.split(",")]))
             assert 0 < len(archs) <= 2, "Invalid ABI list"
             # Higher bitness architectures has priority
             archs.sort(key=lambda x: x.bitness, reverse=True)
@@ -204,10 +209,10 @@ class DeviceInfo:
     def get_first_prop(
         self,
         props: List[str],
-        data_type: Callable[[str], Any] = str,
-        default: Any = None,
+        data_type: Callable[[str], T] = str,
+        default: D = None,
         raise_exception: bool = True,
-    ):
+    ) -> Union[T, D]:
         for prop in props:
             prop_value = self.build_prop._get_prop(prop, data_type)
             if prop_value is None:
