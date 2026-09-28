@@ -114,7 +114,7 @@ class AIKManager:
         image_prefix = image.name
 
         try:
-            process = self._execute_script("unpackimg.sh", image)
+            process = self._execute_script("unpackimg.sh", image.resolve())
         except CalledProcessError as e:
             returncode = e.returncode
             output = e.output
