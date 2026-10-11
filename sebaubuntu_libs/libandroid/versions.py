@@ -91,3 +91,4 @@ class AndroidVersion(_AndroidVersion):
     UPSIDE_DOWN_CAKE = _AndroidVersion("14", "UpsideDownCake", 34)
     VANILLA_ICE_CREAM = _AndroidVersion("15", "VanillaIceCream", 35)
     BAKLAVA = _AndroidVersion("16", "Baklava", 36)
+    CINNAMON_BUN = _AndroidVersion("17", "CinnamonBun", 37)
